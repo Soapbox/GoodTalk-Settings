@@ -4,7 +4,7 @@ namespace SoapBox\Settings\Fetchers;
 
 use Illuminate\Support\Collection;
 
-interface SettingFetcher
+interface Settings
 {
     public function get(string $group, string $identifier);
 

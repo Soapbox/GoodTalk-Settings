@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use SoapBox\Settings\Settings;
+use SoapBox\Settings\Manager;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
@@ -15,23 +15,19 @@ class SettingsTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForASingleIdentifier()
     {
-        $settingDefinition = factory(SettingDefinition::class)->create([
-            'group' => 'settings',
+        factory(SettingDefinition::class)->create([
             'key' => 'setting1',
             'value' => 'default',
-        ]);
+        ])->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '1',
+            'value' => 'override',
+        ]));
         factory(SettingDefinition::class)->create([
-            'group' => 'settings',
             'key' => 'setting2',
             'value' => 'default',
         ]);
-        $settingDefinition->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '1',
-                'value' => 'override',
-            ]));
 
-        $settings = new Settings();
+        $settings = app(Manager::class);
         $result = $settings->get('settings', '1');
 
         $this->assertCount(2, $result);
@@ -44,29 +40,24 @@ class SettingsTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForAManyIdentifier()
     {
-        $settingDefinition1 = factory(SettingDefinition::class)->create([
-            'group' => 'settings',
+        factory(SettingDefinition::class)->create([
             'key' => 'setting1',
             'value' => 'default',
-        ]);
-        $settingDefinition2 = factory(SettingDefinition::class)->create([
+        ])->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '1',
+            'value' => 'override1',
+        ]));
+        factory(SettingDefinition::class)->create([
             'group' => 'settings',
             'key' => 'setting2',
             'value' => 'default',
-        ]);
-        $settingDefinition1->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '1',
-                'value' => 'override1',
-            ]));
-        $settingDefinition2->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '2',
-                'value' => 'override2',
-            ]));
+        ])->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '2',
+            'value' => 'override2',
+        ]));
 
-        $settings = new Settings();
-        $result = $settings->getMany('settings', new Collection(['1', '2', '3']));
+        $settings = app(Manager::class);
+        $result = $settings->getMultiple('settings', new Collection(['1', '2', '3']));
 
         $this->assertCount(3, $result);
         $this->assertSame('override1', $result->get('1')->get('setting1')->getValue());
@@ -75,5 +66,25 @@ class SettingsTest extends TestCase
         $this->assertSame('override2', $result->get('2')->get('setting2')->getValue());
         $this->assertSame('default', $result->get('3')->get('setting1')->getValue());
         $this->assertSame('default', $result->get('3')->get('setting2')->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function callingLoadWarmsUpTheCache()
+    {
+        $definition = factory(SettingDefinition::class)->create([
+            'key' => 'setting1',
+            'value' => 'default',
+        ]);
+        $settings = app(Manager::class);
+        $settings->load('settings', '1');
+
+        $definition->value = 'new_value';
+        $definition->save();
+
+        $result = $settings->get('settings', '1');
+
+        $this->assertSame('default', $result->get('setting1')->getValue());
     }
 }

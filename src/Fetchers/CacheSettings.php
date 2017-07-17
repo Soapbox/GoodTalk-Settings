@@ -6,12 +6,12 @@ use Illuminate\Support\Collection;
 use Psr\SimpleCache\CacheInterface;
 use SoapBox\Settings\Utilities\Cache;
 
-class CacheFetcher implements SettingFetcher
+class Cachesettings implements Settings
 {
     private $fetcher;
     private $cache;
 
-    public function __construct(SettingFetcher $fetcher, CacheInterface $cache)
+    public function __construct(Settings $fetcher, CacheInterface $cache)
     {
         $this->fetcher = $fetcher;
         $this->cache = $cache;

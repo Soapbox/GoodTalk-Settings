@@ -8,7 +8,7 @@ use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingsGroupFactory;
 
-class DatabaseFetcher implements SettingFetcher
+class DatabaseSettings implements Settings
 {
     public function get(string $group, string $identifier)
     {

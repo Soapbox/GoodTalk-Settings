@@ -7,6 +7,7 @@ var fileExists = require('file-exists');
 gulp.task('watch', function() {
     gulp.watch(['src/**/*.php', 'tests/**/*.php'], function (event) {
         var file = event.path;
+        var phpcs = file;
 
         if (file.includes('tests')) {
             file = file
@@ -14,7 +15,6 @@ gulp.task('watch', function() {
                 .replace("Test.php", ".php");
         }
 
-        var phpcs = file;
         var unit  = file
             .replace("/src/", "/tests/Unit/")
             .replace(".php", "Test.php");

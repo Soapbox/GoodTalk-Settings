@@ -7,12 +7,12 @@ use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Utilities\Cache;
 use SoapBox\Settings\Models\SettingValue;
-use SoapBox\Settings\Fetchers\CacheFetcher;
-use SoapBox\Settings\Fetchers\DatabaseFetcher;
+use SoapBox\Settings\Fetchers\CacheSettings;
 use SoapBox\Settings\Models\SettingDefinition;
 use Symfony\Component\Cache\Simple\ArrayCache;
+use SoapBox\Settings\Fetchers\DatabaseSettings;
 
-class CacheFetcherTest extends TestCase
+class CacheSettingsTest extends TestCase
 {
     /**
      * @test
@@ -29,7 +29,7 @@ class CacheFetcherTest extends TestCase
             'key' => 'setting2',
         ]);
 
-        $fetcher = new CacheFetcher(new DatabaseFetcher(), new ArrayCache());
+        $fetcher = new CacheSettings(new DatabaseSettings(), new ArrayCache());
         $settings = $fetcher->get('settings', '1');
 
         $this->assertCount(2, $settings);
@@ -42,7 +42,7 @@ class CacheFetcherTest extends TestCase
      */
     public function itFetchesFromTheCacheWhenTheCacheContainsTheSettings()
     {
-        $settingDefinition1 = factory(SettingDefinition::class)->create([
+        $settingDefinition1 = factory(SettingDefinition::class)->make([
             'key' => 'setting1',
         ]);
 
@@ -55,7 +55,7 @@ class CacheFetcherTest extends TestCase
 
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
-        $fetcher = new CacheFetcher(new DatabaseFetcher(), $cache);
+        $fetcher = new CacheSettings(new DatabaseSettings(), $cache);
         $settings = $fetcher->get('settings', '1');
 
         $this->assertCount(1, $settings);

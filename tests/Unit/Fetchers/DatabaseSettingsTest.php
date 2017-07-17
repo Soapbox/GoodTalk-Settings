@@ -5,29 +5,27 @@ namespace Tests\Units\Fetchers;
 use Tests\TestCase;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
-use SoapBox\Settings\Fetchers\DatabaseFetcher;
 use SoapBox\Settings\Models\SettingDefinition;
+use SoapBox\Settings\Fetchers\DatabaseSettings;
 
-class DatabaseFetcherTest extends TestCase
+class DatabaseSettingsTest extends TestCase
 {
     /**
      * @test
      */
     public function itRetrieves()
     {
-        $settingDefinition = factory(SettingDefinition::class)->create([
+        factory(SettingDefinition::class)->create([
             'key' => 'setting1',
-        ]);
+        ])->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '1',
+            'value' => 'override',
+        ]));
         factory(SettingDefinition::class)->create([
             'key' => 'setting2',
         ]);
-        $settingDefinition->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '1',
-                'value' => 'override',
-            ]));
 
-        $fetcher = new DatabaseFetcher();
+        $fetcher = new DatabaseSettings();
         $settings = $fetcher->get('settings', '1');
 
         $this->assertCount(2, $settings);
