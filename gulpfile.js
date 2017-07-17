@@ -21,18 +21,20 @@ gulp.task('watch', function() {
 
         run('clear').exec();
 
-        if (file.includes("/src/")) {
-            run("./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true --standard=PSR2 " + phpcs)
+        run("./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit true --standard=PSR2 " + phpcs)
+            .exec()
+            .on('error', notify.onError({
+               title: 'Failure',
+               message: 'Linting has failed.!',
+           }));
+
+        if (fileExists(unit)) {
+            run("./vendor/bin/phpunit --colors=always " + unit)
                 .exec()
                 .on('error', notify.onError({
                    title: 'Failure',
-                   message: 'Linting has failed.!',
+                   message: 'Unit tests failed.!',
                }));
-        }
-
-        if (fileExists(unit)) {
-            gulp.src('phpunit.xml')
-              .pipe(phpunit('./vendor/bin/phpunit ' + unit));
         }
     });
 });
