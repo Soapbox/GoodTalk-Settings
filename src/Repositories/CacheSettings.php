@@ -1,6 +1,6 @@
 <?php
 
-namespace SoapBox\Settings\Fetchers;
+namespace SoapBox\Settings\Repositories;
 
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\CacheInterface;

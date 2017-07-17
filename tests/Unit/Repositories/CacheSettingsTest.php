@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Units\Fetchers;
+namespace Tests\Units\Repositories;
 
 use Tests\TestCase;
 use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Utilities\Cache;
 use SoapBox\Settings\Models\SettingValue;
-use SoapBox\Settings\Fetchers\CacheSettings;
 use SoapBox\Settings\Models\SettingDefinition;
 use Symfony\Component\Cache\Simple\ArrayCache;
-use SoapBox\Settings\Fetchers\DatabaseSettings;
+use SoapBox\Settings\Repositories\CacheSettings;
+use SoapBox\Settings\Repositories\DatabaseSettings;
 
 class CacheSettingsTest extends TestCase
 {

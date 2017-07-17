@@ -1,6 +1,6 @@
 <?php
 
-namespace SoapBox\Settings\Fetchers;
+namespace SoapBox\Settings\Repositories;
 
 use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;

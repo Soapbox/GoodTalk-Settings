@@ -4,14 +4,14 @@ namespace SoapBox\Settings;
 
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
-use SoapBox\Settings\Fetchers\SettingFetcher;
+use SoapBox\Settings\Repositories\Settings;
 use SoapBox\Settings\Models\SettingDefinition;
 
 class Manager
 {
     private $settings;
 
-    public function __construct(SettingFetcher $settings)
+    public function __construct(Settings $settings)
     {
         $this->settings = $settings;
     }

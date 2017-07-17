@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Units\Fetchers;
+namespace Tests\Units\Repositories;
 
 use Tests\TestCase;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
-use SoapBox\Settings\Fetchers\DatabaseSettings;
+use SoapBox\Settings\Repositories\DatabaseSettings;
 
 class DatabaseSettingsTest extends TestCase
 {

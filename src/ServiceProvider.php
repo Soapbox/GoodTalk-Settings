@@ -2,10 +2,10 @@
 
 namespace SoapBox\Settings;
 
-use SoapBox\Settings\Fetchers\CacheFetcher;
-use SoapBox\Settings\Fetchers\SettingFetcher;
-use SoapBox\Settings\Fetchers\DatabaseFetcher;
+use SoapBox\Settings\Repositories\Settings;
 use Symfony\Component\Cache\Simple\ArrayCache;
+use SoapBox\Settings\Repositories\CacheSettings;
+use SoapBox\Settings\Repositories\DatabaseSettings;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 
 class ServiceProvider extends IlluminateServiceProvider
@@ -19,8 +19,8 @@ class ServiceProvider extends IlluminateServiceProvider
     {
         $this->loadMigrationsFrom(__DIR__ . '/../resources/migrations');
 
-        $this->app->bind(SettingFetcher::class, function ($app) {
-            return new CacheFetcher(new DatabaseFetcher(), new ArrayCache());
+        $this->app->bind(Settings::class, function ($app) {
+            return new CacheSettings(new DatabaseSettings(), new ArrayCache());
         });
     }
 }
