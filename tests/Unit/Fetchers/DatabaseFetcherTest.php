@@ -4,9 +4,9 @@ namespace Tests\Units\Fetchers;
 
 use Tests\TestCase;
 use Illuminate\Support\Collection;
+use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Fetchers\DatabaseFetcher;
-use SoapBox\Settings\Models\Eloquent\SettingValue;
-use SoapBox\Settings\Models\Eloquent\SettingDefinition;
+use SoapBox\Settings\Models\SettingDefinition;
 
 class DatabaseFetcherTest extends TestCase
 {
@@ -28,11 +28,8 @@ class DatabaseFetcherTest extends TestCase
             ]));
 
         $fetcher = new DatabaseFetcher();
-        $result = $fetcher->get('settings', '1');
+        $settings = $fetcher->get('settings', '1');
 
-        $this->assertCount(1, $result);
-
-        $settings = $result->get('1');
         $this->assertCount(2, $settings);
         $this->assertSame('override', $settings->get('setting1')->getValue());
         $this->assertSame('default', $settings->get('setting2')->getValue());

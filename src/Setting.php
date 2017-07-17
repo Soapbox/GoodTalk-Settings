@@ -18,9 +18,9 @@ class Setting
         $this->identifier = $identifier;
     }
 
-    public function setValue(SettingValue $setting)
+    public function setValue(string $value)
     {
-        $this->value = $setting->value;
+        $this->value = $value;
     }
 
     public function getValue() : string
