@@ -11,12 +11,12 @@ gulp.task('watch', function() {
 
         if (file.includes('tests')) {
             file = file
-                .replace("/tests/Unit/", "/src/")
+                .replace("/tests/Integration/", "/src/")
                 .replace("Test.php", ".php");
         }
 
-        var unit  = file
-            .replace("/src/", "/tests/Unit/")
+        var test = file
+            .replace("/src/", "/tests/Integration/")
             .replace(".php", "Test.php");
 
         run('clear').exec();
@@ -28,12 +28,12 @@ gulp.task('watch', function() {
                message: 'Linting has failed.!',
            }));
 
-        if (fileExists(unit)) {
-            run("./vendor/bin/phpunit --colors=always " + unit)
+        if (fileExists(test)) {
+            run("./vendor/bin/phpunit --colors=always " + test)
                 .exec()
                 .on('error', notify.onError({
                    title: 'Failure',
-                   message: 'Unit tests failed.!',
+                   message: 'Integration tests failed.!',
                }));
         }
     });

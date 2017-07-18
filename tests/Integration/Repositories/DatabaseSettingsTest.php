@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Units\Repositories;
+namespace Tests\Integration\Repositories;
 
 use Tests\TestCase;
 use Illuminate\Support\Collection;

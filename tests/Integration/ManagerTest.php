@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Integration;
 
 use Tests\TestCase;
 use SoapBox\Settings\Manager;
@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 
-class SettingsTest extends TestCase
+class ManagerTest extends TestCase
 {
     /**
      * @test

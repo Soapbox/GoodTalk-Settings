@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Utilities;
+namespace Tests\Integration\Utilities;
 
 use Tests\TestCase;
 use SoapBox\Settings\Models\SettingValue;
