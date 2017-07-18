@@ -16,22 +16,22 @@ class Manager
         $this->settings = $settings;
     }
 
-    public function load(string $group, string $identifier) : void
+    public function load(string $group, string $identifier): void
     {
         $this->loadMultiple($group, new Collection($identifier));
     }
 
-    public function loadMultiple(string $group, Collection $identifiers) : void
+    public function loadMultiple(string $group, Collection $identifiers): void
     {
         $this->getMultiple($group, $identifiers);
     }
 
-    public function get(string $group, string $identifier) : Collection
+    public function get(string $group, string $identifier): Collection
     {
         return $this->settings->get($group, $identifier);
     }
 
-    public function getMultiple(string $group, Collection $identifiers) : Collection
+    public function getMultiple(string $group, Collection $identifiers): Collection
     {
         return $this->settings->getMultiple($group, $identifiers);
     }
