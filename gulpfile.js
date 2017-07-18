@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var phpunit = require('gulp-phpunit');
 var run = require('gulp-run');
 var notify = require('gulp-notify');
 var fileExists = require('file-exists');

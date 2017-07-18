@@ -9,7 +9,6 @@
     "gulp": "^3.9.1",
     "gulp-changed": "^1.3.2",
     "gulp-notify": "^2.2.0",
-    "gulp-phpunit": "^0.17.0",
     "gulp-run": "^1.7.1"
   }
 }
