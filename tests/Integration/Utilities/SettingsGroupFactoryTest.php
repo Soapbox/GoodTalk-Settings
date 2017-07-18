@@ -28,14 +28,13 @@ class SettingsGroupFactoryTest extends TestCase
             ->save(factory(SettingValue::class)->make([
                 'identifier' => 'identifier1',
                 'value' => 'o1',
-            ]))
-        )->push($definitions->get(1)
+            ])))
+            ->push($definitions->get(1)
             ->values()
             ->save(factory(SettingValue::class)->make([
                 'identifier' => 'identifier2',
                 'value' => 'o2',
-            ]))
-        );
+            ])));
 
         $identifiers = new Collection(['identifier1', 'identifier2']);
 
@@ -79,8 +78,7 @@ class SettingsGroupFactoryTest extends TestCase
             ->save(factory(SettingValue::class)->make([
                 'identifier' => 'id1',
                 'value' => 'o1',
-            ]))
-        );
+            ])));
 
         $identifiers = new Collection(['identifier1']);
 

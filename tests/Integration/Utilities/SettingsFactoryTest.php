@@ -54,8 +54,7 @@ class SettingsFactoryTest extends TestCase
             ->save(factory(SettingValue::class)->make([
                 'identifier' => '1',
                 'value' => 'o1',
-            ]))
-        );
+            ])));
 
         $settings = SettingsFactory::make('1', $definitions, $overrides);
 
@@ -86,14 +85,13 @@ class SettingsFactoryTest extends TestCase
             ->save(factory(SettingValue::class)->make([
                 'identifier' => '1',
                 'value' => 'o1',
-            ]))
-        )->push($definitions->get(1)
+            ])))
+            ->push($definitions->get(1)
             ->values()
             ->save(factory(SettingValue::class)->make([
                 'identifier' => '1',
                 'value' => 'o2',
-            ]))
-        );
+            ])));
 
         $settings = SettingsFactory::make('1', $definitions, $overrides);
 
