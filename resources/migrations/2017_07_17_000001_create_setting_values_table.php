@@ -23,6 +23,8 @@ class CreateSettingValuesTable extends Migration
                 ->references('id')
                 ->on('setting_definitions')
                 ->onDelete('cascade');
+
+            $table->unique(['setting_definition_id', 'identifier']);
         });
     }
 

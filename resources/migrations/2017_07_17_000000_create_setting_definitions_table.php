@@ -16,9 +16,10 @@ class CreateSettingDefinitionsTable extends Migration
             $table->increments('id');
             $table->string('group');
             $table->string('key');
-            // $table->string('type');
             $table->mediumText('value');
             $table->timestamps();
+
+            $table->unique(['group', 'key']);
         });
     }
 
