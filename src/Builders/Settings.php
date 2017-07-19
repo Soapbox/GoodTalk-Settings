@@ -8,6 +8,9 @@ use SoapBox\Settings\Models\SettingDefinition;
 
 class Settings
 {
+    /**
+     * Create a new text setting
+     */
     public static function text(string $group, string $key, string $default)
     {
         SettingDefinition::create([

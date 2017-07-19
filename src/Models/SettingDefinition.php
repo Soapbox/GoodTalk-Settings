@@ -2,6 +2,7 @@
 
 namespace SoapBox\Settings\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,6 +31,12 @@ class SettingDefinition extends Model implements Validatable
         return $this->hasMany(SettingValue::class);
     }
 
+    private function getHandler()
+    {
+        $handler = sprintf('\SoapBox\Settings\Models\Handlers\%sHandler', Str::studly($this->type));
+        return new $handler();
+    }
+
     public function getData(): array
     {
         return $this->toArray();
@@ -40,47 +47,20 @@ class SettingDefinition extends Model implements Validatable
         $rules = [
             'group' => 'alpha-dash',
             'key' => 'alpha-dash',
+            'options' => 'array',
             'options.*' => 'alpha-dash',
         ];
 
-        switch ($this->type) {
-            case 'single-select':
-                $rules['value'] = 'in_array:options.*';
-                break;
-            case 'multi-select':
-                $rules['value.*'] = 'in_array:options.*';
-                break;
-        }
-
-        return $rules;
+        return array_merge($rules, $this->getHandler()->getRules());
     }
 
-    /**
-     * Determine whether an attribute should be cast to a native type.
-     *
-     * @param  string  $key
-     * @param  array|string|null  $types
-     * @return bool
-     */
-    public function hasCast($key, $types = null)
+    public function getValueAttribute($value)
     {
-        if (array_key_exists('type', $this->attributes)) {
-            switch ($this->attributes['type']) {
-                case 'text':
-                    $this->casts['value'] = 'string';
-                    break;
-                case 'boolean':
-                    $this->casts['value'] = 'boolean';
-                    break;
-                case 'single-select':
-                    $this->casts['value'] = 'string';
-                    break;
-                case 'multi-select':
-                    $this->casts['value'] = 'array';
-                    break;
-            }
-        }
+        return $this->getHandler()->getValueAttribute($value);
+    }
 
-        return parent::hasCast($key, $types);
+    public function setValueAttribute($value)
+    {
+        $this->getHandler()->setValueAttribute($this->attributes, $value);
     }
 }
