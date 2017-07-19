@@ -2,22 +2,33 @@
 
 namespace Tests;
 
-use ClassFinder;
-use Illuminate\Support\Str;
-use Illuminate\Filesystem\Filesystem;
 use SoapBox\Settings\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TestCase extends BaseTestCase
 {
-    use DatabaseMigrations;
+    use DatabaseTransactions;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->runDatabaseMigrations();
         $this->withFactories(__DIR__ . '/../database/factories');
+    }
+
+    /**
+     * Refresh the application instance.
+     *
+     * @return void
+     */
+    protected function refreshApplication()
+    {
+        parent::refreshApplication();
+
+        if (!Schema::hasTable('migrations')) {
+            $this->artisan('migrate');
+        }
     }
 
     protected function getPackageProviders($app)
