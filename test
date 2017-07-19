@@ -1,8 +1,6 @@
-set -e
+#!/bin/bash
 
-DB_HOST="192.168.10.10"
-DB_USERNAME="homestead"
-DB_PASSWORD="secret"
+set -e
 
 ./vendor/bin/phpcs \
   --standard=PSR2 \
@@ -14,7 +12,6 @@ DB_PASSWORD="secret"
   --extensions=php \
   tests
 
-mysql --host=$DB_HOST --user=$DB_USERNAME --password=$DB_PASSWORD -e "DROP DATABASE IF EXISTS settings_test;"
-mysql --host=$DB_HOST --user=$DB_USERNAME --password=$DB_PASSWORD -e "CREATE DATABASE settings_test;"
+./rebuild_database
 
 ./vendor/bin/phpunit

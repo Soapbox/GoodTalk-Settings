@@ -13,6 +13,22 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
+    public function wat()
+    {
+        $test = factory(SettingDefinition::class)->create([
+            'key' => 'setting1',
+            'value' => 'default',
+            'options' => ['test', 'this']
+        ]);
+
+        dd(\DB::table('setting_definitions')->get());
+
+        dd($test->toArray());
+    }
+
+    /**
+     * @test
+     */
     public function itCanGetAllSettingsWithOverridesForASingleIdentifier()
     {
         factory(SettingDefinition::class)->create([

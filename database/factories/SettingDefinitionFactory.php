@@ -8,5 +8,6 @@ $factory->define(SettingDefinition::class, function (Generator $faker) {
         'group' => 'settings',
         'key' => 'key',
         'value' => 'default',
+        'options' => [],
     ];
 });
