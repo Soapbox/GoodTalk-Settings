@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SettingValue extends Model
 {
-    public static function getValuesForDefinitions(Collection $definitions, Collection $identifiers)
+    public static function getValuesForDefinitions(Collection $definitions, Collection $identifiers): Collection
     {
         return self::whereIn('setting_definition_id', $definitions->pluck('id'))
             ->whereIn('identifier', $identifiers->toArray())

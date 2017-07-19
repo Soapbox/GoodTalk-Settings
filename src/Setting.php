@@ -6,15 +6,17 @@ use SoapBox\Settings\Models\SettingDefinition;
 
 class Setting
 {
-    private $key;
-    private $value;
+    private $group;
     private $identifier;
+    private $value;
+    private $key;
 
     public function __construct(SettingDefinition $definition, string $identifier)
     {
+        $this->group = $definition->group;
+        $this->identifier = $identifier;
         $this->key = $definition->key;
         $this->value = $definition->value;
-        $this->identifier = $identifier;
     }
 
     public function setValue(string $value): void
@@ -22,9 +24,9 @@ class Setting
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function getGroup(): string
     {
-        return $this->value;
+        return $this->group;
     }
 
     public function getKey(): string
@@ -35,5 +37,10 @@ class Setting
     public function getIdentifier(): string
     {
         return $this->identifier;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
     }
 }

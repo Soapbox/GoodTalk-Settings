@@ -31,7 +31,7 @@ class Cachesettings implements Settings
         $cachedValues = (new Collection($this->cache->getMultiple($keys)))
             ->filter()
             ->mapWithKeys(function ($value, $key) {
-                return [Cache::fromCacheKey($key) => $value];
+                return [Cache::cacheKeyToIdentifier($key) => $value];
             });
 
         $missingIdentifiers = $identifiers->filter(function ($identifier) use ($cachedValues) {
