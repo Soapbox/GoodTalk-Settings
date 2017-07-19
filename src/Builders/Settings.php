@@ -8,78 +8,47 @@ use SoapBox\Settings\Models\SettingDefinition;
 
 class Settings
 {
-    private static function create(array $data, array $rules)
-    {
-        $rules['group'] = 'alpha-dash';
-        $rules['key'] = 'alpha-dash';
-        $rules['options.*'] = 'alpha-dash';
-
-        Validator::make($data, $rules)->validate();
-
-        SettingDefinition::create($data);
-    }
-
     public static function text(string $group, string $key, string $default)
     {
-        $data = [
+        SettingDefinition::create([
             'group' => $group,
             'key' => $key,
             'type' => 'text',
             'options' => [],
             'value' => $default,
-        ];
-
-        self::create($data, []);
+        ]);
     }
 
     public static function boolean(string $group, string $key, bool $default)
     {
-        $data = [
+        SettingDefinition::create([
             'group' => $group,
             'key' => $key,
             'type' => 'boolean',
             'options' => [],
             'value' => $default,
-        ];
-
-        $rules = [
-            'value' => 'boolean',
-        ];
-
-        self::create($data, $rules);
+        ]);
     }
 
     public static function singleSelect(string $group, string $key, array $options, string $default)
     {
-        $data = [
+        SettingDefinition::create([
             'group' => $group,
             'key' => $key,
             'type' => 'single-select',
             'options' => $options,
             'value' => $default,
-        ];
-
-        $rules = [
-            'value' => 'in_array:options.*',
-        ];
-
-        self::create($data, $rules);
+        ]);
     }
 
     public static function multiSelect(string $group, string $key, array $options, array $default)
     {
-        $data = [
+        SettingDefinition::create([
             'group' => $group,
             'key' => $key,
             'type' => 'multi-select',
             'options' => $options,
             'value' => $default,
-        ];
-
-        $rules = [
-            'value.*' => 'in_array:options.*',
-        ];
-
-        self::create($data, $rules);
+        ]);
     }
 }

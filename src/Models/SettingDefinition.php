@@ -5,9 +5,13 @@ namespace SoapBox\Settings\Models;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Jaspaul\EloquentModelValidation\Traits\Validates;
+use Jaspaul\EloquentModelValidation\Contracts\Validatable;
 
-class SettingDefinition extends Model
+class SettingDefinition extends Model implements Validatable
 {
+    use Validates;
+
     protected $guarded = [];
     protected $casts = ['options' => 'array'];
 
@@ -24,6 +28,31 @@ class SettingDefinition extends Model
     public function values(): HasMany
     {
         return $this->hasMany(SettingValue::class);
+    }
+
+    public function getData(): array
+    {
+        return $this->toArray();
+    }
+
+    public function getRules(): array
+    {
+        $rules = [
+            'group' => 'alpha-dash',
+            'key' => 'alpha-dash',
+            'options.*' => 'alpha-dash',
+        ];
+
+        switch ($this->type) {
+            case 'single-select':
+                $rules['value'] = 'in_array:options.*';
+                break;
+            case 'multi-select':
+                $rules['value.*'] = 'in_array:options.*';
+                break;
+        }
+
+        return $rules;
     }
 
     /**
