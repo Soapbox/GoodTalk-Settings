@@ -2,6 +2,7 @@
 
 namespace SoapBox\Settings\Models;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
