@@ -19,7 +19,7 @@ class Setting
         $this->value = $definition->value;
     }
 
-    public function setValue(string $value): void
+    public function setValue($value): void
     {
         $this->value = $value;
     }
