@@ -97,7 +97,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getRules(): array
     {
-        return $this->getMutator()->getRules();
+        return $this->definition->getRules();
     }
 
     /**

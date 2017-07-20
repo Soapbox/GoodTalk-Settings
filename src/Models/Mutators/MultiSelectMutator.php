@@ -7,19 +7,6 @@ use Illuminate\Support\Facades\Validator;
 class MultiSelectMutator extends Mutator
 {
     /**
-     * Get the validation rules for this Mutator
-     *
-     * @return array
-     */
-    public function getRules(): array
-    {
-        return [
-            'value' => 'array',
-            'value.*' => 'in_array:options.*',
-        ];
-    }
-
-    /**
      * Deserialize the given value from the database
      *
      * @param string $value
