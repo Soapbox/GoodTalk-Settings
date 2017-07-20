@@ -91,6 +91,15 @@ class Settings
         ]);
     }
 
+    /**
+     * Update a setting definition for the given group and key
+     *
+     * @param string $group
+     * @param string $key
+     * @param callable $callback
+     *
+     * @return void
+     */
     public static function update(string $group, string $key, callable $callback): void
     {
         $definition = SettingDefinition::where('group', $group)
