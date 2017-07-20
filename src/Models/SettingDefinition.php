@@ -57,11 +57,11 @@ class SettingDefinition extends Model implements Validatable
 
     public function getValueAttribute($value)
     {
-        return $this->getHandler()->getValueAttribute($value);
+        return $this->getHandler()->deserializeValue($value);
     }
 
     public function setValueAttribute($value): void
     {
-        $this->getHandler()->setValueAttribute($this->attributes, $value);
+        $this->attributes['value'] = $this->getHandler()->serializeValue($value);
     }
 }

@@ -9,13 +9,13 @@ abstract class Handler
         return [];
     }
 
-    public function getValueAttribute(string $value)
+    public function deserializeValue(string $value)
     {
         return $value;
     }
 
-    public function setValueAttribute(array &$attributes, $value): void
+    public function serializeValue($value): string
     {
-        $attributes['value'] = $value;
+        return $value;
     }
 }

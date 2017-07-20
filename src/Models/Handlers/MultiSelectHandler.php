@@ -13,13 +13,13 @@ class MultiSelectHandler extends Handler
             'value.*' => 'in_array:options.*',
         ];
     }
-    public function getValueAttribute(string $value)
+    public function deserializeValue(string $value)
     {
         return json_decode($value, true);
     }
 
-    public function setValueAttribute(array &$attributes, $value): void
+    public function serializeValue($value): string
     {
-        $attributes['value'] = json_encode($value);
+        return json_encode($value);
     }
 }

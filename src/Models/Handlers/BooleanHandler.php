@@ -4,13 +4,13 @@ namespace SoapBox\Settings\Models\Handlers;
 
 class BooleanHandler extends Handler
 {
-    public function getValueAttribute(string $value)
+    public function deserializeValue(string $value)
     {
         return $value === 'true';
     }
 
-    public function setValueAttribute(array &$attributes, $value): void
+    public function serializeValue($value): string
     {
-        $attributes['value'] = $value ? 'true' : 'false';
+        return $value ? 'true' : 'false';
     }
 }
