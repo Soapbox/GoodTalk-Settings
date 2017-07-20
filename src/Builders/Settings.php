@@ -22,11 +22,12 @@ class Settings
      *
      * @return void
      */
-    public static function text(string $group, string $key, string $default): void
+    public static function text(string $group, string $key, string $default, string $validation = ''): void
     {
         TextSettingDefinition::create([
             'group' => $group,
             'key' => $key,
+            'validation' => $validation,
             'options' => [],
             'value' => $default,
         ]);

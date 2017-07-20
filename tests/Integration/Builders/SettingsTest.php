@@ -19,13 +19,14 @@ class SettingsTest extends TestCase
      */
     public function itCanCreateATextSetting()
     {
-        Settings::text('settings', 'test', 'value');
+        Settings::text('settings', 'test', 'value', 'required');
         $definition = SettingDefinition::where('group', 'settings')
             ->where('key', 'test')
             ->firstOrFail();
 
         $this->assertEquals([], $definition->options);
         $this->assertEquals('value', $definition->value);
+        $this->assertEquals('required', $definition->validation);
         $this->assertEquals(TextSettingDefinition::class, $definition->type);
     }
 
