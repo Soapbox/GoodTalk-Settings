@@ -2,13 +2,13 @@
 
 namespace SoapBox\Settings\Models;
 
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\TextHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\TextMutator;
 
 class TextSettingDefinition extends SettingDefinition
 {
-    public function getValueMutator(): Handler
+    public function getValueMutator(): Mutator
     {
-        return new TextHandler();
+        return new TextMutator();
     }
 }

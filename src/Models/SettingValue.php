@@ -5,8 +5,8 @@ namespace SoapBox\Settings\Models;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\TextHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Jaspaul\EloquentModelValidation\Traits\Validates;
 use Jaspaul\EloquentModelValidation\Contracts\Validatable;
@@ -70,9 +70,9 @@ class SettingValue extends Model implements Validatable
     /**
      * Get the handler for this type of setting definition
      *
-     * @return \SoapBox\Settings\Models\Handlers\Handler
+     * @return \SoapBox\Settings\Models\Mutators\Mutator
      */
-    private function getHandler(): Handler
+    private function getMutator(): Mutator
     {
         return $this->definition->getValueMutator();
     }
@@ -97,7 +97,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getRules(): array
     {
-        return $this->getHandler()->getRules();
+        return $this->getMutator()->getRules();
     }
 
     /**
@@ -109,7 +109,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getValueAttribute($value)
     {
-        return $this->getHandler()->deserializeValue($value);
+        return $this->getMutator()->deserializeValue($value);
     }
 
     /**
@@ -121,6 +121,6 @@ class SettingValue extends Model implements Validatable
      */
     public function setValueAttribute($value): void
     {
-        $this->attributes['value'] = $this->getHandler()->serializeValue($value);
+        $this->attributes['value'] = $this->getMutator()->serializeValue($value);
     }
 }

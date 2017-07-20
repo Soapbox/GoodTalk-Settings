@@ -2,13 +2,13 @@
 
 namespace SoapBox\Settings\Models;
 
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\BooleanHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\BooleanMutator;
 
 class BooleanSettingDefinition extends SettingDefinition
 {
-    public function getValueMutator(): Handler
+    public function getValueMutator(): Mutator
     {
-        return new BooleanHandler();
+        return new BooleanMutator();
     }
 }

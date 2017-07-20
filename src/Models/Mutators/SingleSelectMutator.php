@@ -1,11 +1,11 @@
 <?php
 
-namespace SoapBox\Settings\Models\Handlers;
+namespace SoapBox\Settings\Models\Mutators;
 
-class SingleSelectHandler extends Handler
+class SingleSelectMutator extends Mutator
 {
     /**
-     * Get the validation rules for this Handler
+     * Get the validation rules for this Mutator
      *
      * @return array
      */

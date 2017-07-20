@@ -2,13 +2,13 @@
 
 namespace SoapBox\Settings\Models;
 
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\MultiSelectHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\MultiSelectMutator;
 
 class MultiSelectSettingDefinition extends SettingDefinition
 {
     /**
-     * Get the validation rules for this Handler
+     * Get the validation rules for this Mutator
      *
      * @return array
      */
@@ -22,8 +22,8 @@ class MultiSelectSettingDefinition extends SettingDefinition
         return array_merge(parent::getRules(), $rules);
     }
 
-    public function getValueMutator(): Handler
+    public function getValueMutator(): Mutator
     {
-        return new MultiSelectHandler();
+        return new MultiSelectMutator();
     }
 }

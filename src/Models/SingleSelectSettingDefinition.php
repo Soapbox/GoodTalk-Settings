@@ -2,13 +2,13 @@
 
 namespace SoapBox\Settings\Models;
 
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\SingleSelectHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\SingleSelectMutator;
 
 class SingleSelectSettingDefinition extends SettingDefinition
 {
     /**
-     * Get the validation rules for this Handler
+     * Get the validation rules for this Mutator
      *
      * @return array
      */
@@ -21,8 +21,8 @@ class SingleSelectSettingDefinition extends SettingDefinition
         return array_merge(parent::getRules(), $rules);
     }
 
-    public function getValueMutator(): Handler
+    public function getValueMutator(): Mutator
     {
-        return new SingleSelectHandler();
+        return new SingleSelectMutator();
     }
 }

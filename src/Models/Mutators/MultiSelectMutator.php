@@ -1,13 +1,13 @@
 <?php
 
-namespace SoapBox\Settings\Models\Handlers;
+namespace SoapBox\Settings\Models\Mutators;
 
 use Illuminate\Support\Facades\Validator;
 
-class MultiSelectHandler extends Handler
+class MultiSelectMutator extends Mutator
 {
     /**
-     * Get the validation rules for this Handler
+     * Get the validation rules for this Mutator
      *
      * @return array
      */

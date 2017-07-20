@@ -6,8 +6,8 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\TextHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Jaspaul\EloquentModelValidation\Traits\Validates;
 use Jaspaul\EloquentModelValidation\Contracts\Validatable;
@@ -79,9 +79,9 @@ class SettingDefinition extends Model implements Validatable
         ];
     }
 
-    public function getValueMutator(): Handler
+    public function getValueMutator(): Mutator
     {
-        return new TextHandler();
+        return new TextMutator();
     }
 
     /**

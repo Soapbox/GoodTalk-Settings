@@ -1,8 +1,8 @@
 <?php
 
-namespace SoapBox\Settings\Models\Handlers;
+namespace SoapBox\Settings\Models\Mutators;
 
-abstract class Handler
+abstract class Mutator
 {
     /**
      * Get the validation rules for this Handler

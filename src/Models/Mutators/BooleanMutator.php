@@ -1,8 +1,8 @@
 <?php
 
-namespace SoapBox\Settings\Models\Handlers;
+namespace SoapBox\Settings\Models\Mutators;
 
-class BooleanHandler extends Handler
+class BooleanMutator extends Mutator
 {
     /**
      * Deserialize the given value from the database
