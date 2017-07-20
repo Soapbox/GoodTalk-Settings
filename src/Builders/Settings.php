@@ -2,6 +2,7 @@
 
 namespace SoapBox\Settings\Builders;
 
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\Validator;
 use SoapBox\Settings\Models\SettingDefinition;
@@ -88,5 +89,19 @@ class Settings
             'options' => $options,
             'value' => $default,
         ]);
+    }
+
+    public static function update(string $group, string $key, callable $callback): void
+    {
+        $definition = SettingDefinition::where('group', $group)
+            ->where('key', $key)
+            ->firstOrFail();
+
+        $class = sprintf('%s\Updaters\%sSettingUpdater', __NAMESPACE__, Str::studly($definition->type));
+        $updater = new $class($definition);
+
+        $callback($updater);
+
+        $definition->save();
     }
 }
