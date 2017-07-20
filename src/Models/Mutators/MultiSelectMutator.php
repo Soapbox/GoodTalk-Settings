@@ -1,30 +1,32 @@
 <?php
 
-namespace SoapBox\Settings\Models\Handlers;
+namespace SoapBox\Settings\Models\Mutators;
 
-class BooleanHandler extends Handler
+use Illuminate\Support\Facades\Validator;
+
+class MultiSelectMutator extends Mutator
 {
     /**
      * Deserialize the given value from the database
      *
      * @param string $value
      *
-     * @return bool
+     * @return array
      */
     public function deserializeValue(string $value)
     {
-        return $value === 'true';
+        return json_decode($value, true);
     }
 
     /**
      * Serialize the given value for the database
      *
-     * @param bool $value
+     * @param array $value
      *
      * @return string
      */
     public function serializeValue($value): string
     {
-        return $value ? 'true' : 'false';
+        return json_encode($value);
     }
 }
