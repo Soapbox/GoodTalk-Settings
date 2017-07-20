@@ -28,7 +28,7 @@ gulp.task('watch', function() {
            }));
 
         if (fileExists(test)) {
-            run("./vendor/bin/phpunit --colors=always " + test)
+            run("./rebuild_database; ./vendor/bin/phpunit --colors=always " + test)
                 .exec()
                 .on('error', notify.onError({
                    title: 'Failure',

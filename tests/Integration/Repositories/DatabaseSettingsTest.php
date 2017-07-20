@@ -15,12 +15,14 @@ class DatabaseSettingsTest extends TestCase
      */
     public function itRetrieves()
     {
-        factory(SettingDefinition::class)->create([
+        $definition = factory(SettingDefinition::class)->create([
             'key' => 'setting1',
-        ])->values()->save(factory(SettingValue::class)->make([
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
-        ]));
+        ]);
         factory(SettingDefinition::class)->create([
             'key' => 'setting2',
         ]);

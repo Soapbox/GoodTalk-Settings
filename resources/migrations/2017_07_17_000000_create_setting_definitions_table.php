@@ -16,6 +16,9 @@ class CreateSettingDefinitionsTable extends Migration
             $table->increments('id');
             $table->string('group');
             $table->string('key');
+            $table->string('type');
+            $table->mediumText('validation')->nullable();
+            $table->mediumText('options');
             $table->mediumText('value');
             $table->timestamps();
 

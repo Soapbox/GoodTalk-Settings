@@ -49,12 +49,11 @@ class SettingsFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push($definitions->get(0)
-            ->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '1',
-                'value' => 'o1',
-            ])));
+        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+            'setting_definition_id' => $definitions->get(0)->id,
+            'identifier' => '1',
+            'value' => 'o1',
+        ]));
 
         $settings = SettingsFactory::make('1', $definitions, $overrides);
 
@@ -80,18 +79,16 @@ class SettingsFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push($definitions->get(0)
-            ->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '1',
-                'value' => 'o1',
-            ])))
-            ->push($definitions->get(1)
-            ->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => '1',
-                'value' => 'o2',
-            ])));
+        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+            'setting_definition_id' => $definitions->get(0)->id,
+            'identifier' => '1',
+            'value' => 'o1',
+        ]))
+        ->push(factory(SettingValue::class)->create([
+            'setting_definition_id' => $definitions->get(1)->id,
+            'identifier' => '1',
+            'value' => 'o2',
+        ]));
 
         $settings = SettingsFactory::make('1', $definitions, $overrides);
 
