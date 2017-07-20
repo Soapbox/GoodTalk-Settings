@@ -106,9 +106,7 @@ class Settings
      */
     public static function ensureHasOverride(string $group, string $key, Collection $identifiers): void
     {
-        $definition = SettingDefinition::where('group', $group)
-            ->where('key', $key)
-            ->firstOrFail();
+        $definition = SettingDefinition::getDefinition($group, $key);
 
         $existingOverrides = $definition->values->keyBy('identifier');
 
@@ -133,9 +131,7 @@ class Settings
      */
     public static function update(string $group, string $key, callable $callback): void
     {
-        $definition = SettingDefinition::where('group', $group)
-            ->where('key', $key)
-            ->firstOrFail();
+        $definition = SettingDefinition::getDefinition($group, $key);
 
         $class = substr($definition->type, strrpos($definition->type, '\\') + 1);
         $class = sprintf('%s\Updaters\%sUpdater', __NAMESPACE__, $class);
