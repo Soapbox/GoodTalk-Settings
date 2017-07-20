@@ -11,7 +11,7 @@ class SingleSelectSettingDefinitionUpdater extends SettingUpdater
      *
      * @return void
      */
-    public function setDefault(string $default)
+    public function setDefault(string $default): void
     {
         $this->definition->value = $default;
     }

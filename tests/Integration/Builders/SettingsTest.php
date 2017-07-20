@@ -19,13 +19,14 @@ class SettingsTest extends TestCase
      */
     public function itCanCreateATextSetting()
     {
-        Settings::text('settings', 'test', 'value');
+        Settings::text('settings', 'test', 'value', 'required');
         $definition = SettingDefinition::where('group', 'settings')
             ->where('key', 'test')
             ->firstOrFail();
 
         $this->assertEquals([], $definition->options);
         $this->assertEquals('value', $definition->value);
+        $this->assertEquals('required', $definition->validation);
         $this->assertEquals(TextSettingDefinition::class, $definition->type);
     }
 
@@ -162,6 +163,47 @@ class SettingsTest extends TestCase
         $definition = $definition->fresh();
 
         $this->assertSame(['option2'], $definition->value);
+    }
+
+    /**
+     * @test
+     */
+    public function itFailsSavingTheSettingDefinitionIfTheDefaultNoLongerPassesTheCustomValidation()
+    {
+        $this->expectException(ValidationException::class);
+        $definition = factory(TextSettingDefinition::class)->create(['value' => 'not.valid']);
+
+        Settings::update('settings', 'key', function ($updater) {
+            $updater->setValidation('alpha-dash');
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function itRemovesOverridesThatNoLongerPassCustomValidationForATextSetting()
+    {
+        $definition = factory(TextSettingDefinition::class)->create();
+        $override1 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '1',
+            'value' => 'valid',
+        ]);
+        $override2 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '2',
+            'value' => 'not-valid',
+        ]);
+
+        Settings::update('settings', 'key', function ($updater) {
+            $updater->setValidation('alpha');
+        });
+
+        $definition = $definition->fresh();
+
+        $this->assertSame('default', $definition->value);
+        $this->assertDatabaseHas('setting_values', ['id' => $override1->id]);
+        $this->assertDatabaseMissing('setting_values', ['id' => $override2->id]);
     }
 
     /**

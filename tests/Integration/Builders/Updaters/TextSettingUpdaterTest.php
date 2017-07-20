@@ -22,4 +22,19 @@ class TextSettingUpdaterTest extends TestCase
 
         $this->assertSame('new_default', $definition->value);
     }
+
+    /**
+     * @test
+     */
+    public function itCanUpdateTheValidationRules()
+    {
+        $definition = factory(TextSettingDefinition::class)->make([
+            'value' => 'default',
+        ]);
+
+        $updater = new TextSettingDefinitionUpdater($definition);
+        $updater->setValidation('required');
+
+        $this->assertSame('required', $definition->validation);
+    }
 }

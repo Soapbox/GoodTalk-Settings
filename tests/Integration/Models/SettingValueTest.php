@@ -16,6 +16,37 @@ class SettingValueTest extends TestCase
     /**
      * @test
      */
+    public function itFailsCreatingATextSettingWhenTheValueDoesNotPassCustomValidation()
+    {
+        $this->expectException(ValidationException::class);
+        $definition = factory(TextSettingDefinition::class)->create([
+            'validation' => 'alpha-dash',
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'value' => 'override.value',
+        ]);
+    }
+
+
+    /**
+     * @test
+     */
+    public function itSuccessfullyCreatesATextSettingWhenTheValuePassesCustomValidation()
+    {
+        $definition = factory(TextSettingDefinition::class)->create([
+            'validation' => 'alpha-dash',
+        ]);
+        $override = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'value' => 'override-value',
+        ]);
+        $this->assertSame('override-value', $override->fresh()->value);
+    }
+
+    /**
+     * @test
+     */
     public function itFailsCreatingASingleSelectSettingWhenTheValueIsNotInTheOptions()
     {
         $this->expectException(ValidationException::class);
