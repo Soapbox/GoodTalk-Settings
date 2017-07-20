@@ -9,7 +9,7 @@ class BooleanHandler extends Handler
         return $value === 'true';
     }
 
-    public function setValueAttribute(array &$attributes, $value)
+    public function setValueAttribute(array &$attributes, $value): void
     {
         $attributes['value'] = $value ? 'true' : 'false';
     }

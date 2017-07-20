@@ -4,7 +4,7 @@ namespace SoapBox\Settings\Models\Handlers;
 
 abstract class Handler
 {
-    public function getRules()
+    public function getRules(): array
     {
         return [];
     }
@@ -14,7 +14,7 @@ abstract class Handler
         return $value;
     }
 
-    public function setValueAttribute(array &$attributes, $value)
+    public function setValueAttribute(array &$attributes, $value): void
     {
         $attributes['value'] = $value;
     }

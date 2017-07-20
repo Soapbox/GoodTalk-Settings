@@ -5,6 +5,7 @@ namespace SoapBox\Settings\Models;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use SoapBox\Settings\Models\Handlers\Handler;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Jaspaul\EloquentModelValidation\Traits\Validates;
 use Jaspaul\EloquentModelValidation\Contracts\Validatable;
@@ -31,7 +32,7 @@ class SettingDefinition extends Model implements Validatable
         return $this->hasMany(SettingValue::class);
     }
 
-    private function getHandler()
+    private function getHandler(): Handler
     {
         $handler = sprintf('\SoapBox\Settings\Models\Handlers\%sHandler', Str::studly($this->type));
         return new $handler();
@@ -59,7 +60,7 @@ class SettingDefinition extends Model implements Validatable
         return $this->getHandler()->getValueAttribute($value);
     }
 
-    public function setValueAttribute($value)
+    public function setValueAttribute($value): void
     {
         $this->getHandler()->setValueAttribute($this->attributes, $value);
     }

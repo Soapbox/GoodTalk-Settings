@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MultiSelectHandler extends Handler
 {
-    public function getRules()
+    public function getRules(): array
     {
         return [
             'value' => 'array',
@@ -18,7 +18,7 @@ class MultiSelectHandler extends Handler
         return json_decode($value, true);
     }
 
-    public function setValueAttribute(array &$attributes, $value)
+    public function setValueAttribute(array &$attributes, $value): void
     {
         $attributes['value'] = json_encode($value);
     }
