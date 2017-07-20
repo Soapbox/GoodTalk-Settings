@@ -4,6 +4,7 @@ namespace Tests\Integration\Builders;
 
 use Tests\TestCase;
 use SoapBox\Settings\Builders\Settings;
+use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
 
@@ -157,5 +158,57 @@ class SettingsTest extends TestCase
         $definition = $definition->fresh();
 
         $this->assertSame(['option2'], $definition->value);
+    }
+
+    /**
+     * @test
+     */
+    public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForASingleSelectSetting()
+    {
+        $definition = factory(SettingDefinition::class)->states('single-select')->create();
+        $override1 = $definition->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '1',
+            'value' => 'option1',
+        ]));
+        $override2 = $definition->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '2',
+            'value' => 'option2',
+        ]));
+
+        Settings::update('settings', 'key', function ($updater) {
+            $updater->removeOption('option2');
+        });
+
+        $definition = $definition->fresh();
+
+        $this->assertSame('option1', $definition->value);
+        $this->assertDatabaseHas('setting_values', ['id' => $override1->id]);
+        $this->assertDatabaseMissing('setting_values', ['id' => $override2->id]);
+    }
+
+    /**
+     * @test
+     */
+    public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForAMultiSelectSetting()
+    {
+        $definition = factory(SettingDefinition::class)->states('multi-select')->create();
+        $override1 = $definition->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '1',
+            'value' => ['option1'],
+        ]));
+        $override2 = $definition->values()->save(factory(SettingValue::class)->make([
+            'identifier' => '2',
+            'value' => ['option2'],
+        ]));
+
+        Settings::update('settings', 'key', function ($updater) {
+            $updater->removeOption('option2');
+        });
+
+        $definition = $definition->fresh();
+
+        $this->assertSame(['option1'], $definition->value);
+        $this->assertDatabaseHas('setting_values', ['id' => $override1->id]);
+        $this->assertDatabaseMissing('setting_values', ['id' => $override2->id]);
     }
 }

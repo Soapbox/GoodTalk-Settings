@@ -112,5 +112,10 @@ class Settings
         $callback($updater);
 
         $definition->save();
+        $definition->values->filter(function ($value) {
+            return $value->isInvalid();
+        })->each(function ($value) {
+            $value->delete();
+        });
     }
 }
