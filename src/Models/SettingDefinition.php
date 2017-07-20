@@ -46,7 +46,7 @@ class SettingDefinition extends Model implements Validatable
      */
     private function getHandler(): Handler
     {
-        $handler = sprintf('\SoapBox\Settings\Models\Handlers\%sHandler', Str::studly($this->type));
+        $handler = sprintf('%s\Handlers\%sHandler', __NAMESPACE__, Str::studly($this->type));
         return new $handler();
     }
 
