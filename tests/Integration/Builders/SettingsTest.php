@@ -168,6 +168,47 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
+    public function itFailsSavingTheSettingDefinitionIfTheDefaultNoLongerPassesTheCustomValidation()
+    {
+        $this->expectException(ValidationException::class);
+        $definition = factory(TextSettingDefinition::class)->create(['value' => 'not.valid']);
+
+        Settings::update('settings', 'key', function ($updater) {
+            $updater->setValidation('alpha-dash');
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function itRemovesOverridesThatNoLongerPassCustomValidationForATextSetting()
+    {
+        $definition = factory(TextSettingDefinition::class)->create();
+        $override1 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '1',
+            'value' => 'valid',
+        ]);
+        $override2 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '2',
+            'value' => 'not-valid',
+        ]);
+
+        Settings::update('settings', 'key', function ($updater) {
+            $updater->setValidation('alpha');
+        });
+
+        $definition = $definition->fresh();
+
+        $this->assertSame('default', $definition->value);
+        $this->assertDatabaseHas('setting_values', ['id' => $override1->id]);
+        $this->assertDatabaseMissing('setting_values', ['id' => $override2->id]);
+    }
+
+    /**
+     * @test
+     */
     public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForASingleSelectSetting()
     {
         $definition = factory(SingleSelectSettingDefinition::class)->create();

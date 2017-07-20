@@ -11,8 +11,20 @@ class TextSettingDefinitionUpdater extends SettingUpdater
      *
      * @return void
      */
-    public function setDefault(string $default)
+    public function setDefault(string $default): void
     {
         $this->definition->value = $default;
+    }
+
+    /**
+     * Set the custom validation rules for the setting definition
+     *
+     * @param string $validation
+     *
+     * @return void
+     */
+    public function setValidation(string $validation): void
+    {
+        $this->definition->validation = $validation;
     }
 }
