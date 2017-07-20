@@ -2,7 +2,7 @@
 
 namespace SoapBox\Settings\Builders\Updaters;
 
-class TextSettingUpdater extends SettingUpdater
+class TextSettingDefinitionUpdater extends SettingUpdater
 {
     /**
      * Set the default value for the setting definition

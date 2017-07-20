@@ -32,6 +32,21 @@ class SettingValue extends Model implements Validatable
             ->get();
     }
 
+    public function __construct(array $attributes = [])
+    {
+        if (isset($attributes['setting_definition_id'])) {
+            $this->setting_definition_id = $attributes['setting_definition_id'];
+        }
+
+        parent::__construct($attributes);
+    }
+
+    public static function create(SettingDefinition $definition, array $attributes)
+    {
+        $attributes['setting_definition_id'] = $definition->id;
+        return parent::create($attributes);
+    }
+
     public function definition(): BelongsTo
     {
         return $this->belongsTo(SettingDefinition::class, 'setting_definition_id');
@@ -42,14 +57,9 @@ class SettingValue extends Model implements Validatable
      *
      * @return \SoapBox\Settings\Models\Handlers\Handler
      */
-    private function getHandler(): ?Handler
+    private function getHandler(): Handler
     {
-        if (!is_null($this->setting_definition_id)) {
-            $handler = sprintf('%s\Handlers\%sHandler', __NAMESPACE__, Str::studly($this->definition->type));
-            return new $handler();
-        }
-
-        return null;
+        return $this->definition->getValueMutator();
     }
 
     /**
@@ -84,11 +94,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getValueAttribute($value)
     {
-        if ($handler = $this->getHandler()) {
-            return $handler->deserializeValue($value);
-        }
-
-        return $value;
+        return $this->getHandler()->deserializeValue($value);
     }
 
     /**
@@ -100,17 +106,6 @@ class SettingValue extends Model implements Validatable
      */
     public function setValueAttribute($value): void
     {
-        if ($handler = $this->getHandler()) {
-            $this->attributes['value'] = $handler->serializeValue($value);
-            return;
-        }
-
-        $this->attributes['value'] = $value;
-    }
-
-    public function setSettingDefinitionIdAttribute($value): void
-    {
-        $this->attributes['setting_definition_id'] = $value;
-        $this->value = $this->attributes['value'];
+        $this->attributes['value'] = $this->getHandler()->serializeValue($value);
     }
 }

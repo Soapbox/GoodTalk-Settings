@@ -3,8 +3,8 @@
 namespace Tests\Integration\Builders\Updaters;
 
 use Tests\TestCase;
-use SoapBox\Settings\Models\SettingDefinition;
-use SoapBox\Settings\Builders\Updaters\TextSettingUpdater;
+use SoapBox\Settings\Models\TextSettingDefinition;
+use SoapBox\Settings\Builders\Updaters\TextSettingDefinitionUpdater;
 
 class TextSettingUpdaterTest extends TestCase
 {
@@ -13,11 +13,11 @@ class TextSettingUpdaterTest extends TestCase
      */
     public function itCanUpdateTheDefaultValue()
     {
-        $definition = factory(SettingDefinition::class)->states('text')->make([
+        $definition = factory(TextSettingDefinition::class)->make([
             'value' => 'default',
         ]);
 
-        $updater = new TextSettingUpdater($definition);
+        $updater = new TextSettingDefinitionUpdater($definition);
         $updater->setDefault('new_default');
 
         $this->assertSame('new_default', $definition->value);

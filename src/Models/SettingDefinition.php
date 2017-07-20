@@ -2,10 +2,12 @@
 
 namespace SoapBox\Settings\Models;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use SoapBox\Settings\Models\Handlers\Handler;
+use SoapBox\Settings\Models\Handlers\TextHandler;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Jaspaul\EloquentModelValidation\Traits\Validates;
 use Jaspaul\EloquentModelValidation\Contracts\Validatable;
@@ -16,6 +18,19 @@ class SettingDefinition extends Model implements Validatable
 
     protected $guarded = [];
     protected $casts = ['options' => 'array'];
+    protected $table = 'setting_definitions';
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param array $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        $attributes['type'] = static::class;
+        parent::__construct($attributes);
+    }
 
     /**
      * Get all the setting definitions for the given group
@@ -36,18 +51,7 @@ class SettingDefinition extends Model implements Validatable
      */
     public function values(): HasMany
     {
-        return $this->hasMany(SettingValue::class);
-    }
-
-    /**
-     * Get the handler for this type of setting definition
-     *
-     * @return \SoapBox\Settings\Models\Handlers\Handler
-     */
-    private function getHandler(): Handler
-    {
-        $handler = sprintf('%s\Handlers\%sHandler', __NAMESPACE__, Str::studly($this->type));
-        return new $handler();
+        return $this->hasMany(SettingValue::class, 'setting_definition_id');
     }
 
     /**
@@ -67,37 +71,101 @@ class SettingDefinition extends Model implements Validatable
      */
     public function getRules(): array
     {
-        $rules = [
+        return [
             'group' => 'alpha-dash',
             'key' => 'alpha-dash',
             'options' => 'array',
             'options.*' => 'alpha-dash',
         ];
+    }
 
-        return array_merge($rules, $this->getHandler()->getRules());
+    public function getValueMutator(): Handler
+    {
+        return new TextHandler();
     }
 
     /**
      * Convert the value attribute from the serialized value
      *
-     * @param mixed $value
+     * @param string $value
      *
-     * @return mixed
+     * @return bool
      */
-    public function getValueAttribute($value)
+    public function getValueAttribute(string $value)
     {
-        return $this->getHandler()->deserializeValue($value);
+        return $this->getValueMutator()->deserializeValue($value);
     }
 
     /**
      * Convert the value to the serialized value for the database
      *
-     * @param mixed $value
+     * @param bool $value
      *
      * @return void
      */
     public function setValueAttribute($value): void
     {
-        $this->attributes['value'] = $this->getHandler()->serializeValue($value);
+        $this->attributes['value'] = $this->getValueMutator()->serializeValue($value);
+    }
+
+    /**
+     * Get a new query builder for the model's table.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function newQuery()
+    {
+        $builder = parent::newQuery();
+
+        if (self::class !== static::class) {
+            $builder->where('type', static::class);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Create a new instance of the given model.
+     *
+     * @param  array  $attributes
+     * @param  bool  $exists
+     * @return static
+     */
+    public function newInstance($attributes = [], $exists = false)
+    {
+        // This method just provides a convenient way for us to generate fresh model
+        // instances of this current model. It is particularly useful during the
+        // hydration of new objects via the Eloquent query builder instances.
+        if (isset($attributes['type'])) {
+            $model = new $attributes['type']((array) $attributes);
+        } else {
+            $model = new static((array) $attributes);
+        }
+
+        $model->exists = $exists;
+
+        $model->setConnection(
+            $this->getConnectionName()
+        );
+
+        return $model;
+    }
+
+    /**
+     * Create a new model instance that is existing.
+     *
+     * @param  array  $attributes
+     * @param  string|null  $connection
+     * @return static
+     */
+    public function newFromBuilder($attributes = [], $connection = null)
+    {
+        $model = $this->newInstance(Arr::only((array) $attributes, ['type']), true);
+
+        $model->setRawAttributes((array) $attributes, true);
+
+        $model->setConnection($connection ?: $this->getConnectionName());
+
+        return $model;
     }
 }

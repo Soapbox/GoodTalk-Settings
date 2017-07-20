@@ -3,25 +3,25 @@
 namespace Tests\Integration\Builders\Updaters;
 
 use Tests\TestCase;
-use SoapBox\Settings\Models\SettingDefinition;
-use SoapBox\Settings\Builders\Updaters\SingleSelectSettingUpdater;
+use SoapBox\Settings\Models\MultiSelectSettingDefinition;
+use SoapBox\Settings\Builders\Updaters\MultiSelectSettingDefinitionUpdater;
 
-class SingleSelectSettingUpdaterTest extends TestCase
+class MultiSelectSettingDefinitionUpdaterTest extends TestCase
 {
     /**
      * @test
      */
     public function itCanUpdateTheDefaultValue()
     {
-        $definition = factory(SettingDefinition::class)->states('single-select')->make([
+        $definition = factory(MultiSelectSettingDefinition::class)->make([
             'options' => ['option1', 'option2'],
-            'value' => 'option1',
+            'value' => ['option1'],
         ]);
 
-        $updater = new SingleSelectSettingUpdater($definition);
-        $updater->setDefault('option2');
+        $updater = new MultiSelectSettingDefinitionUpdater($definition);
+        $updater->setDefault(['option1', 'option2']);
 
-        $this->assertSame('option2', $definition->value);
+        $this->assertSame(['option1', 'option2'], $definition->value);
     }
 
     /**
@@ -29,12 +29,12 @@ class SingleSelectSettingUpdaterTest extends TestCase
      */
     public function itCanAddAnOptionValue()
     {
-        $definition = factory(SettingDefinition::class)->states('single-select')->make([
+        $definition = factory(MultiSelectSettingDefinition::class)->make([
             'options' => ['option1', 'option2'],
-            'value' => 'option1',
+            'value' => ['option1'],
         ]);
 
-        $updater = new SingleSelectSettingUpdater($definition);
+        $updater = new MultiSelectSettingDefinitionUpdater($definition);
         $updater->addOption('option3');
 
         $this->assertEquals(['option1', 'option2', 'option3'], $definition->options);
@@ -45,12 +45,12 @@ class SingleSelectSettingUpdaterTest extends TestCase
      */
     public function itCanRemoveAnOptionValue()
     {
-        $definition = factory(SettingDefinition::class)->states('single-select')->make([
+        $definition = factory(MultiSelectSettingDefinition::class)->make([
             'options' => ['option1', 'option2'],
-            'value' => 'option1',
+            'value' => ['option1'],
         ]);
 
-        $updater = new SingleSelectSettingUpdater($definition);
+        $updater = new MultiSelectSettingDefinitionUpdater($definition);
         $updater->removeOption('option2');
 
         $this->assertEquals(['option1'], $definition->options);
@@ -61,12 +61,12 @@ class SingleSelectSettingUpdaterTest extends TestCase
      */
     public function itCanSetTheOptionValues()
     {
-        $definition = factory(SettingDefinition::class)->states('single-select')->make([
+        $definition = factory(MultiSelectSettingDefinition::class)->make([
             'options' => ['option1', 'option2'],
-            'value' => 'option1',
+            'value' => ['option1'],
         ]);
 
-        $updater = new SingleSelectSettingUpdater($definition);
+        $updater = new MultiSelectSettingDefinitionUpdater($definition);
         $updater->setOptions(['new_option1', 'new_option2']);
 
         $this->assertEquals(['new_option1', 'new_option2'], $definition->options);

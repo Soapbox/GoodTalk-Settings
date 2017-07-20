@@ -7,6 +7,10 @@ use SoapBox\Settings\Builders\Settings;
 use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
+use SoapBox\Settings\Models\TextSettingDefinition;
+use SoapBox\Settings\Models\BooleanSettingDefinition;
+use SoapBox\Settings\Models\MultiSelectSettingDefinition;
+use SoapBox\Settings\Models\SingleSelectSettingDefinition;
 
 class SettingsTest extends TestCase
 {
@@ -22,7 +26,7 @@ class SettingsTest extends TestCase
 
         $this->assertEquals([], $definition->options);
         $this->assertEquals('value', $definition->value);
-        $this->assertEquals('text', $definition->type);
+        $this->assertEquals(TextSettingDefinition::class, $definition->type);
     }
 
     /**
@@ -37,7 +41,7 @@ class SettingsTest extends TestCase
 
         $this->assertEquals([], $definition->options);
         $this->assertEquals(true, $definition->value);
-        $this->assertEquals('boolean', $definition->type);
+        $this->assertEquals(BooleanSettingDefinition::class, $definition->type);
     }
 
     /**
@@ -52,7 +56,7 @@ class SettingsTest extends TestCase
 
         $this->assertEquals(['option1', 'option2'], $definition->options);
         $this->assertEquals('option1', $definition->value);
-        $this->assertEquals('single-select', $definition->type);
+        $this->assertEquals(SingleSelectSettingDefinition::class, $definition->type);
     }
 
     /**
@@ -67,7 +71,7 @@ class SettingsTest extends TestCase
 
         $this->assertEquals(['option1', 'option2'], $definition->options);
         $this->assertEquals(['option1', 'option2'], $definition->value);
-        $this->assertEquals('multi-select', $definition->type);
+        $this->assertEquals(MultiSelectSettingDefinition::class, $definition->type);
     }
 
     /**
@@ -75,7 +79,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateATextSetting()
     {
-        $definition = factory(SettingDefinition::class)->states('text')->create();
+        $definition = factory(TextSettingDefinition::class)->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault('new_default');
@@ -91,7 +95,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateABooleanSetting()
     {
-        $definition = factory(SettingDefinition::class)->states('boolean')->create();
+        $definition = factory(BooleanSettingDefinition::class)->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault(false);
@@ -108,7 +112,7 @@ class SettingsTest extends TestCase
     public function itFailsToUpdateASingleSelectSettingWhenItIsInAnInvalidState()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(SettingDefinition::class)->states('single-select')->create();
+        $definition = factory(SingleSelectSettingDefinition::class)->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option1');
@@ -120,7 +124,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateASingleSelectSetting()
     {
-        $definition = factory(SettingDefinition::class)->states('single-select')->create();
+        $definition = factory(SingleSelectSettingDefinition::class)->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault('option2');
@@ -137,7 +141,7 @@ class SettingsTest extends TestCase
     public function itFailsToUpdateAMultiSelectSettingWhenItIsInAnInvalidState()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(SettingDefinition::class)->states('multi-select')->create();
+        $definition = factory(MultiSelectSettingDefinition::class)->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option1');
@@ -149,7 +153,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateAMultiSelectSetting()
     {
-        $definition = factory(SettingDefinition::class)->states('multi-select')->create();
+        $definition = factory(MultiSelectSettingDefinition::class)->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault(['option2']);
@@ -165,15 +169,17 @@ class SettingsTest extends TestCase
      */
     public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForASingleSelectSetting()
     {
-        $definition = factory(SettingDefinition::class)->states('single-select')->create();
-        $override1 = $definition->values()->save(factory(SettingValue::class)->make([
+        $definition = factory(SingleSelectSettingDefinition::class)->create();
+        $override1 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'option1',
-        ]));
-        $override2 = $definition->values()->save(factory(SettingValue::class)->make([
+        ]);
+        $override2 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'option2',
-        ]));
+        ]);
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option2');
@@ -191,15 +197,17 @@ class SettingsTest extends TestCase
      */
     public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForAMultiSelectSetting()
     {
-        $definition = factory(SettingDefinition::class)->states('multi-select')->create();
-        $override1 = $definition->values()->save(factory(SettingValue::class)->make([
+        $definition = factory(MultiSelectSettingDefinition::class)->create();
+        $override1 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => ['option1'],
-        ]));
-        $override2 = $definition->values()->save(factory(SettingValue::class)->make([
+        ]);
+        $override2 = factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => ['option2'],
-        ]));
+        ]);
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option2');

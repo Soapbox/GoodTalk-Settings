@@ -2,7 +2,7 @@
 
 namespace SoapBox\Settings\Builders\Updaters;
 
-class BooleanSettingUpdater extends SettingUpdater
+class BooleanSettingDefinitionUpdater extends SettingUpdater
 {
     /**
      * Set the default value for the setting definition
