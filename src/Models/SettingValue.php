@@ -84,10 +84,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getData(): array
     {
-        $data = [
-            'options' => $this->definition->options,
-        ];
-        return array_merge($data, $this->toArray());
+        return array_merge($this->definition->getData(), $this->toArray());
     }
 
     /**
