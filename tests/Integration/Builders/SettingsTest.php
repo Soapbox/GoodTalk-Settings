@@ -3,6 +3,7 @@
 namespace Tests\Integration\Builders;
 
 use Tests\TestCase;
+use Illuminate\Support\Collection;
 use SoapBox\Settings\Builders\Settings;
 use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
@@ -260,5 +261,24 @@ class SettingsTest extends TestCase
         $this->assertSame(['option1'], $definition->value);
         $this->assertDatabaseHas('setting_values', ['id' => $override1->id]);
         $this->assertDatabaseMissing('setting_values', ['id' => $override2->id]);
+    }
+
+    /**
+     * @test
+     */
+    public function ensuringOverridesCreatesOverridesWithTheDefaultValue()
+    {
+        $definition = factory(TextSettingDefinition::class)->create();
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '1',
+            'value' => 'override',
+        ]);
+
+        Settings::ensureHasOverride('settings', 'key', new Collection(['1', '2', '3']));
+
+        $this->assertDatabaseHas('setting_values', ['identifier' => '1', 'value' => 'override']);
+        $this->assertDatabaseHas('setting_values', ['identifier' => '2', 'value' => 'default']);
+        $this->assertDatabaseHas('setting_values', ['identifier' => '3', 'value' => 'default']);
     }
 }
