@@ -15,6 +15,31 @@ class SettingValue extends Model implements Validatable
 {
     use Validates;
 
+    protected $guarded = [];
+
+    public function __construct(array $attributes = [])
+    {
+        if (isset($attributes['setting_definition_id'])) {
+            $this->setting_definition_id = $attributes['setting_definition_id'];
+        }
+
+        parent::__construct($attributes);
+    }
+
+    /**
+     * Create a new instance of a SettingValue
+     *
+     * @param \SoapBox\Settings\Models\SettingDefinition $definition
+     * @param array $attributes
+     *
+     * @return \SoapBox\Settings\Models\SettingValue
+     */
+    public static function create(SettingDefinition $definition, array $attributes)
+    {
+        $attributes['setting_definition_id'] = $definition->id;
+        return (new static())->newQuery()->create($attributes);
+    }
+
     /**
      * Get all the setting values for the given definitions and identifiers
      *
@@ -32,21 +57,11 @@ class SettingValue extends Model implements Validatable
             ->get();
     }
 
-    public function __construct(array $attributes = [])
-    {
-        if (isset($attributes['setting_definition_id'])) {
-            $this->setting_definition_id = $attributes['setting_definition_id'];
-        }
-
-        parent::__construct($attributes);
-    }
-
-    public static function create(SettingDefinition $definition, array $attributes)
-    {
-        $attributes['setting_definition_id'] = $definition->id;
-        return parent::create($attributes);
-    }
-
+    /**
+     * The relationship to the setting definition
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function definition(): BelongsTo
     {
         return $this->belongsTo(SettingDefinition::class, 'setting_definition_id');

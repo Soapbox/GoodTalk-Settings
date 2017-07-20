@@ -135,4 +135,19 @@ class SettingValueTest extends TestCase
         ]);
         $this->assertSame(['option1', 'option2'], $override->fresh()->value);
     }
+
+    /**
+     * @test
+     */
+    public function itSuccessfullyCreatesASettingValue()
+    {
+        $definition = factory(TextSettingDefinition::class)->create();
+        $override = SettingValue::create(
+            $definition,
+            ['value' => 'override', 'identifier' => '1']
+        );
+
+        $this->assertSame('1', $override->fresh()->identifier);
+        $this->assertSame('override', $override->fresh()->value);
+    }
 }
