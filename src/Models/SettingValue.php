@@ -5,8 +5,8 @@ namespace SoapBox\Settings\Models;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
-use SoapBox\Settings\Models\Handlers\Handler;
-use SoapBox\Settings\Models\Handlers\TextHandler;
+use SoapBox\Settings\Models\Mutators\Mutator;
+use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Jaspaul\EloquentModelValidation\Traits\Validates;
 use Jaspaul\EloquentModelValidation\Contracts\Validatable;
@@ -14,6 +14,31 @@ use Jaspaul\EloquentModelValidation\Contracts\Validatable;
 class SettingValue extends Model implements Validatable
 {
     use Validates;
+
+    protected $guarded = [];
+
+    public function __construct(array $attributes = [])
+    {
+        if (isset($attributes['setting_definition_id'])) {
+            $this->setting_definition_id = $attributes['setting_definition_id'];
+        }
+
+        parent::__construct($attributes);
+    }
+
+    /**
+     * Create a new instance of a SettingValue
+     *
+     * @param \SoapBox\Settings\Models\SettingDefinition $definition
+     * @param array $attributes
+     *
+     * @return \SoapBox\Settings\Models\SettingValue
+     */
+    public static function create(SettingDefinition $definition, array $attributes)
+    {
+        $attributes['setting_definition_id'] = $definition->id;
+        return (new static())->newQuery()->create($attributes);
+    }
 
     /**
      * Get all the setting values for the given definitions and identifiers
@@ -32,6 +57,11 @@ class SettingValue extends Model implements Validatable
             ->get();
     }
 
+    /**
+     * The relationship to the setting definition
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function definition(): BelongsTo
     {
         return $this->belongsTo(SettingDefinition::class, 'setting_definition_id');
@@ -40,16 +70,11 @@ class SettingValue extends Model implements Validatable
     /**
      * Get the handler for this type of setting definition
      *
-     * @return \SoapBox\Settings\Models\Handlers\Handler
+     * @return \SoapBox\Settings\Models\Mutators\Mutator
      */
-    private function getHandler(): ?Handler
+    private function getMutator(): Mutator
     {
-        if (!is_null($this->setting_definition_id)) {
-            $handler = sprintf('%s\Handlers\%sHandler', __NAMESPACE__, Str::studly($this->definition->type));
-            return new $handler();
-        }
-
-        return null;
+        return $this->definition->getValueMutator();
     }
 
     /**
@@ -59,10 +84,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getData(): array
     {
-        $data = [
-            'options' => $this->definition->options,
-        ];
-        return array_merge($data, $this->toArray());
+        return array_merge($this->definition->getData(), $this->toArray());
     }
 
     /**
@@ -72,7 +94,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getRules(): array
     {
-        return $this->getHandler()->getRules();
+        return $this->definition->getRules();
     }
 
     /**
@@ -84,11 +106,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getValueAttribute($value)
     {
-        if ($handler = $this->getHandler()) {
-            return $handler->deserializeValue($value);
-        }
-
-        return $value;
+        return $this->getMutator()->deserializeValue($value);
     }
 
     /**
@@ -100,17 +118,6 @@ class SettingValue extends Model implements Validatable
      */
     public function setValueAttribute($value): void
     {
-        if ($handler = $this->getHandler()) {
-            $this->attributes['value'] = $handler->serializeValue($value);
-            return;
-        }
-
-        $this->attributes['value'] = $value;
-    }
-
-    public function setSettingDefinitionIdAttribute($value): void
-    {
-        $this->attributes['setting_definition_id'] = $value;
-        $this->value = $this->attributes['value'];
+        $this->attributes['value'] = $this->getMutator()->serializeValue($value);
     }
 }

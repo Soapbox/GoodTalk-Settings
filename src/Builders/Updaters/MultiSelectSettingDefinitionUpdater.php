@@ -2,16 +2,16 @@
 
 namespace SoapBox\Settings\Builders\Updaters;
 
-class SingleSelectSettingUpdater extends SettingUpdater
+class MultiSelectSettingDefinitionUpdater extends SettingUpdater
 {
     /**
      * Set the default value for the setting definition
      *
-     * @param string $default
+     * @param array $default
      *
      * @return void
      */
-    public function setDefault(string $default)
+    public function setDefault(array $default): void
     {
         $this->definition->value = $default;
     }

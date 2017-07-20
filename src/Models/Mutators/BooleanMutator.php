@@ -1,40 +1,30 @@
 <?php
 
-namespace SoapBox\Settings\Models\Handlers;
+namespace SoapBox\Settings\Models\Mutators;
 
-abstract class Handler
+class BooleanMutator extends Mutator
 {
-    /**
-     * Get the validation rules for this Handler
-     *
-     * @return array
-     */
-    public function getRules(): array
-    {
-        return [];
-    }
-
     /**
      * Deserialize the given value from the database
      *
      * @param string $value
      *
-     * @return mixed
+     * @return bool
      */
     public function deserializeValue(string $value)
     {
-        return $value;
+        return $value === 'true';
     }
 
     /**
      * Serialize the given value for the database
      *
-     * @param mixed $value
+     * @param bool $value
      *
      * @return string
      */
     public function serializeValue($value): string
     {
-        return $value;
+        return $value ? 'true' : 'false';
     }
 }

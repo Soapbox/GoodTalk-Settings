@@ -15,13 +15,16 @@ class ManagerTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForASingleIdentifier()
     {
-        factory(SettingDefinition::class)->create([
+        $definition = factory(SettingDefinition::class)->create([
             'key' => 'setting1',
             'value' => 'default',
-        ])->values()->save(factory(SettingValue::class)->make([
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
-        ]));
+        ]);
+
         factory(SettingDefinition::class)->create([
             'key' => 'setting2',
             'value' => 'default',
@@ -40,21 +43,25 @@ class ManagerTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForAManyIdentifier()
     {
-        factory(SettingDefinition::class)->create([
+        $definition = factory(SettingDefinition::class)->create([
             'key' => 'setting1',
             'value' => 'default',
-        ])->values()->save(factory(SettingValue::class)->make([
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override1',
-        ]));
-        factory(SettingDefinition::class)->create([
+        ]);
+        $definition = factory(SettingDefinition::class)->create([
             'group' => 'settings',
             'key' => 'setting2',
             'value' => 'default',
-        ])->values()->save(factory(SettingValue::class)->make([
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'override2',
-        ]));
+        ]);
 
         $settings = app(Manager::class);
         $result = $settings->getMultiple('settings', new Collection(['1', '2', '3']));

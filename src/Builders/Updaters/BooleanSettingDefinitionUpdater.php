@@ -2,16 +2,16 @@
 
 namespace SoapBox\Settings\Builders\Updaters;
 
-class TextSettingUpdater extends SettingUpdater
+class BooleanSettingDefinitionUpdater extends SettingUpdater
 {
     /**
      * Set the default value for the setting definition
      *
-     * @param string $default
+     * @param bool $default
      *
      * @return void
      */
-    public function setDefault(string $default)
+    public function setDefault(bool $default): void
     {
         $this->definition->value = $default;
     }

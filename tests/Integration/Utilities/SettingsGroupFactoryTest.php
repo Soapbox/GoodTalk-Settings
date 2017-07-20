@@ -23,18 +23,16 @@ class SettingsGroupFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push($definitions->get(0)
-            ->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => 'identifier1',
-                'value' => 'o1',
-            ])))
-            ->push($definitions->get(1)
-            ->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => 'identifier2',
-                'value' => 'o2',
-            ])));
+        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+            'setting_definition_id' => $definitions->get(0)->id,
+            'identifier' => 'identifier1',
+            'value' => 'o1',
+        ]))
+        ->push(factory(SettingValue::class)->make([
+            'setting_definition_id' => $definitions->get(1)->id,
+            'identifier' => 'identifier2',
+            'value' => 'o2',
+        ]));
 
         $identifiers = new Collection(['identifier1', 'identifier2']);
 
@@ -73,12 +71,11 @@ class SettingsGroupFactoryTest extends TestCase
             'value' => 'v1',
         ]));
 
-        $overrides = (new Collection())->push($definitions->get(0)
-            ->values()
-            ->save(factory(SettingValue::class)->make([
-                'identifier' => 'id1',
-                'value' => 'o1',
-            ])));
+        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+            'setting_definition_id' => $definitions->get(0)->id,
+            'identifier' => 'id1',
+            'value' => 'o1',
+        ]));
 
         $identifiers = new Collection(['identifier1']);
 
