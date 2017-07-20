@@ -17,32 +17,54 @@ class SettingDefinition extends Model implements Validatable
     protected $guarded = [];
     protected $casts = ['options' => 'array'];
 
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-    }
-
+    /**
+     * Get all the setting definitions for the given group
+     *
+     * @param string $group
+     *
+     * @return \Illuminate\Support\Collection
+     */
     public static function getForGroup(string $group): Collection
     {
         return self::where('group', $group)->get();
     }
 
+    /**
+     * Define the relationship to the setting value overrides
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function values(): HasMany
     {
         return $this->hasMany(SettingValue::class);
     }
 
+    /**
+     * Get the handler for this type of setting definition
+     *
+     * @return \SoapBox\Settings\Models\Handlers\Handler
+     */
     private function getHandler(): Handler
     {
         $handler = sprintf('\SoapBox\Settings\Models\Handlers\%sHandler', Str::studly($this->type));
         return new $handler();
     }
 
+    /**
+     * Get the data to validate
+     *
+     * @return array
+     */
     public function getData(): array
     {
         return $this->toArray();
     }
 
+    /**
+     * Get the validation rules for this model
+     *
+     * @return array
+     */
     public function getRules(): array
     {
         $rules = [
@@ -55,11 +77,25 @@ class SettingDefinition extends Model implements Validatable
         return array_merge($rules, $this->getHandler()->getRules());
     }
 
+    /**
+     * Convert the value attribute from the serialized value
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
     public function getValueAttribute($value)
     {
         return $this->getHandler()->deserializeValue($value);
     }
 
+    /**
+     * Convert the value to the serialized value for the database
+     *
+     * @param mixed $value
+     *
+     * @return void
+     */
     public function setValueAttribute($value): void
     {
         $this->attributes['value'] = $this->getHandler()->serializeValue($value);

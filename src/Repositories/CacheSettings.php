@@ -17,12 +17,29 @@ class Cachesettings implements Settings
         $this->cache = $cache;
     }
 
-    public function get(string $group, string $identifier)
+    /**
+     * Get the settings for the given group and identifier
+     *
+     * @param string $group
+     * @param string $identifier
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function get(string $group, string $identifier): Collection
     {
         return $this->getMultiple($group, new Collection($identifier))->get($identifier);
     }
 
-    public function getMultiple(string $group, Collection $identifiers)
+    /**
+     * Get the settings for the given and the identifiers
+     *
+     * @param string $group
+     * @param \Illuminate\Support\Collection $identifiers
+     *        A collection of strings
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getMultiple(string $group, Collection $identifiers): Collection
     {
         $keys = $identifiers->map(function (string $identifier) use ($group) {
             return Cache::toCacheKey($group, $identifier);
