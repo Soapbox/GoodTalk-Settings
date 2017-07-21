@@ -4,7 +4,9 @@ namespace SoapBox\Settings\Builders;
 
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Models\TextSettingDefinition;
 use SoapBox\Settings\Models\BooleanSettingDefinition;
@@ -93,6 +95,32 @@ class Settings
     }
 
     /**
+     * Ensure that there are overrides for each of the given identifiers for the
+     * the setting identified by the given group and key
+     *
+     * @param string $group
+     * @param string $key
+     * @param \Illuminate\Support\Collection $identifiers
+     *
+     * @return void
+     */
+    public static function ensureHasOverride(string $group, string $key, Collection $identifiers): void
+    {
+        $definition = SettingDefinition::getDefinition($group, $key);
+
+        $existingOverrides = $definition->values->keyBy('identifier');
+
+        $identifiers->filter(function ($identifier) use ($existingOverrides) {
+            return !$existingOverrides->has($identifier);
+        })->each(function ($identifier) use ($definition) {
+            SettingValue::create(
+                $definition,
+                ['value' => $definition->value, 'identifier' => $identifier]
+            );
+        });
+    }
+
+    /**
      * Update a setting definition for the given group and key
      *
      * @param string $group
@@ -103,9 +131,7 @@ class Settings
      */
     public static function update(string $group, string $key, callable $callback): void
     {
-        $definition = SettingDefinition::where('group', $group)
-            ->where('key', $key)
-            ->firstOrFail();
+        $definition = SettingDefinition::getDefinition($group, $key);
 
         $class = substr($definition->type, strrpos($definition->type, '\\') + 1);
         $class = sprintf('%s\Updaters\%sUpdater', __NAMESPACE__, $class);

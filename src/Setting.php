@@ -7,16 +7,16 @@ use SoapBox\Settings\Models\SettingDefinition;
 class Setting
 {
     private $group;
+    private $key;
     private $identifier;
     private $value;
-    private $key;
 
-    public function __construct(SettingDefinition $definition, string $identifier)
+    public function __construct(string $group, string $key, string $identifier, $value)
     {
-        $this->group = $definition->group;
+        $this->group = $group;
+        $this->key = $key;
         $this->identifier = $identifier;
-        $this->key = $definition->key;
-        $this->value = $definition->value;
+        $this->value = $value;
     }
 
     /**

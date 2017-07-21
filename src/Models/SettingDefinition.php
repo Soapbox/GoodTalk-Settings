@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use SoapBox\Settings\Models\Mutators\Mutator;
 use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -41,7 +42,20 @@ class SettingDefinition extends Model implements Validatable
      */
     public static function getForGroup(string $group): Collection
     {
-        return self::where('group', $group)->get();
+        return self::group($group)->get();
+    }
+
+    /**
+     * Get the setting definition for the given group and key
+     *
+     * @param string $group
+     * @param string $key
+     *
+     * @return \SoapBox\Settings\Models\SettingDefinition
+     */
+    public static function getDefinition(string $group, string $key): SettingDefinition
+    {
+        return self::group($group)->key($key)->firstOrFail();
     }
 
     /**
@@ -167,5 +181,31 @@ class SettingDefinition extends Model implements Validatable
         $model->setConnection($connection ?: $this->getConnectionName());
 
         return $model;
+    }
+
+    /**
+     * Scope a query to only settings for the given group
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $value
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeGroup(Builder $query, string $value): Builder
+    {
+        return $query->where('group', $value);
+    }
+
+    /**
+     * Scope a query to only settings for the given key
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $value
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeKey(Builder $query, string $value): Builder
+    {
+        return $query->where('key', $value);
     }
 }
