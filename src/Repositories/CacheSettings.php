@@ -2,6 +2,7 @@
 
 namespace SoapBox\Settings\Repositories;
 
+use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 use Psr\SimpleCache\CacheInterface;
 use SoapBox\Settings\Utilities\Cache;
@@ -62,5 +63,18 @@ class Cachesettings implements Settings
         }));
 
         return $cachedValues->union($missingValues);
+    }
+
+    /**
+     * Store a setting value override for the given setting
+     *
+     * @param \SoapBox\Settings\Setting $setting
+     *
+     * @return \SoapBox\Settings\Setting
+     */
+    public function store(Setting $setting): Setting
+    {
+        $this->cache->delete(Cache::toCacheKey($setting->getGroup(), $setting->getIdentifier()));
+        return $this->fetcher->store($setting);
     }
 }
