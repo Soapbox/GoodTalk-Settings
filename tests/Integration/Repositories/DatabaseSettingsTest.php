@@ -31,8 +31,8 @@ class DatabaseSettingsTest extends TestCase
             'key' => 'setting2',
         ]);
 
-        $fetcher = new DatabaseSettings();
-        $settings = $fetcher->get('settings', '1');
+        $repository = new DatabaseSettings();
+        $settings = $repository->get('settings', '1');
 
         $this->assertCount(2, $settings);
         $this->assertSame('override', $settings->get('setting1')->getValue());

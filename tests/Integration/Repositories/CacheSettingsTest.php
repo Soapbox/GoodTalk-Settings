@@ -31,8 +31,8 @@ class CacheSettingsTest extends TestCase
             'key' => 'setting2',
         ]);
 
-        $fetcher = new CacheSettings(new DatabaseSettings(), new ArrayCache());
-        $settings = $fetcher->get('settings', '1');
+        $repository = new CacheSettings(new DatabaseSettings(), new ArrayCache());
+        $settings = $repository->get('settings', '1');
 
         $this->assertCount(2, $settings);
         $this->assertSame('override', $settings->get('setting1')->getValue());
@@ -57,8 +57,8 @@ class CacheSettingsTest extends TestCase
 
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
-        $fetcher = new CacheSettings(new DatabaseSettings(), $cache);
-        $settings = $fetcher->get('settings', '1');
+        $repository = new CacheSettings(new DatabaseSettings(), $cache);
+        $settings = $repository->get('settings', '1');
 
         $this->assertCount(1, $settings);
         $this->assertSame('cached_value1', $settings->get('setting1')->getValue());
@@ -86,13 +86,13 @@ class CacheSettingsTest extends TestCase
         $collection->put('setting1', $setting);
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
-        $fetcher = new CacheSettings(new DatabaseSettings(), $cache);
-        $fetcher->store($setting);
+        $repository = new CacheSettings(new DatabaseSettings(), $cache);
+        $repository->store($setting);
 
         $this->assertFalse($cache->has('settings.1'));
         $this->assertTrue($cache->has('settings.2'));
 
-        $settings = $fetcher->get('settings', '1');
+        $settings = $repository->get('settings', '1');
 
         $this->assertTrue($cache->has('settings.1'));
         $this->assertTrue($cache->has('settings.2'));

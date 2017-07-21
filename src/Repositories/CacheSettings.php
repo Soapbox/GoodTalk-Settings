@@ -7,14 +7,14 @@ use Illuminate\Support\Collection;
 use Psr\SimpleCache\CacheInterface;
 use SoapBox\Settings\Utilities\Cache;
 
-class Cachesettings implements Settings
+class CacheSettings implements Settings
 {
-    private $fetcher;
+    private $parent;
     private $cache;
 
-    public function __construct(Settings $fetcher, CacheInterface $cache)
+    public function __construct(Settings $parent, CacheInterface $cache)
     {
-        $this->fetcher = $fetcher;
+        $this->parent = $parent;
         $this->cache = $cache;
     }
 
@@ -56,7 +56,7 @@ class Cachesettings implements Settings
             return !$cachedValues->has($identifier);
         });
 
-        $missingValues = $this->fetcher->getMultiple($group, $missingIdentifiers);
+        $missingValues = $this->parent->getMultiple($group, $missingIdentifiers);
 
         $this->cache->setMultiple($missingValues->mapWithKeys(function ($value, $key) use ($group) {
             return [Cache::toCacheKey($group, $key) => $value];
@@ -75,6 +75,6 @@ class Cachesettings implements Settings
     public function store(Setting $setting): Setting
     {
         $this->cache->delete(Cache::toCacheKey($setting->getGroup(), $setting->getIdentifier()));
-        return $this->fetcher->store($setting);
+        return $this->parent->store($setting);
     }
 }
