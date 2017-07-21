@@ -187,6 +187,7 @@ class SettingDefinition extends Model implements Validatable
      * Scope a query to only settings for the given group
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $value
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -199,6 +200,7 @@ class SettingDefinition extends Model implements Validatable
      * Scope a query to only settings for the given key
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $value
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */

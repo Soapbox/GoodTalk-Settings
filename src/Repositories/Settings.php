@@ -2,6 +2,7 @@
 
 namespace SoapBox\Settings\Repositories;
 
+use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 
 interface Settings
@@ -26,4 +27,13 @@ interface Settings
      * @return \Illuminate\Support\Collection
      */
     public function getMultiple(string $group, Collection $identifiers): Collection;
+
+    /**
+     * Store a setting value override for the given setting
+     *
+     * @param \SoapBox\Settings\Setting $setting
+     *
+     * @return \SoapBox\Settings\Setting
+     */
+    public function store(Setting $setting): Setting;
 }

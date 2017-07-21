@@ -74,4 +74,16 @@ class Manager
     {
         return $this->settings->getMultiple($group, $identifiers);
     }
+
+    /**
+     * Save the given setting
+     *
+     * @param \SoapBox\Settings\Setting $setting
+     *
+     * @return \SoapBox\Settings\Setting
+     */
+    public function store(Setting $setting): Setting
+    {
+        return $this->settings->store($setting);
+    }
 }

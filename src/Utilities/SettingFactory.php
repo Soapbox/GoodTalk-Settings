@@ -19,7 +19,7 @@ class SettingFactory
      */
     public static function make(string $identifier, SettingDefinition $definition, SettingValue $value = null)
     {
-        $setting = new Setting($definition, $identifier);
+        $setting = new Setting($definition->group, $definition->key, $identifier, $definition->value);
 
         if (!is_null($value)) {
             $setting->setValue($value->value);
