@@ -17,7 +17,7 @@ class DatabaseSettingsTest extends TestCase
     /**
      * @test
      */
-    public function itRetrieves()
+    public function itFetchesDefinitionsFromTheDatabaseAndAppliesTheirOverride()
     {
         $definition = factory(SettingDefinition::class)->create([
             'key' => 'setting1',
@@ -37,6 +37,37 @@ class DatabaseSettingsTest extends TestCase
         $this->assertCount(2, $settings);
         $this->assertSame('override', $settings->get('setting1')->getValue());
         $this->assertSame('default', $settings->get('setting2')->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function itFetchesDefinitionsFromTheDatabaseAndAppliesTheirOverrideForMultipleIdentifiers()
+    {
+        $definition = factory(SettingDefinition::class)->create([
+            'key' => 'setting1',
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '1',
+            'value' => 'override1',
+        ]);
+        factory(SettingValue::class)->create([
+            'setting_definition_id' => $definition->id,
+            'identifier' => '2',
+            'value' => 'override2',
+        ]);
+
+        $repository = new DatabaseSettings();
+        $result = $repository->getMultiple('settings', new Collection(['1', '2']));
+
+        $this->assertCount(2, $result);
+
+        $settings = $result->get('1');
+        $this->assertSame('override1', $settings->get('setting1')->getValue());
+
+        $settings = $result->get('2');
+        $this->assertSame('override2', $settings->get('setting1')->getValue());
     }
 
     /**
