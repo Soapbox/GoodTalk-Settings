@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use SoapBox\Settings\Models\SettingValue;
+use SoapBox\Settings\Utilities\KeyValidator;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Models\TextSettingDefinition;
 use SoapBox\Settings\Models\BooleanSettingDefinition;
@@ -17,6 +18,11 @@ class Settings
 {
     /**
      * Create a new text setting
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group, key or default value fail to pass validation. The
+     *         group and key must only contain in the set [a-zA-Z0-9-_]. The
+     *         default value must pass the custom validation rules submitted.
      *
      * @param string $group
      * @param string $key
@@ -38,6 +44,10 @@ class Settings
     /**
      * Create a new boolean setting
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or key fail to pass validation. The group and key
+     *         must only contain in the set [a-zA-Z0-9-_].
+     *
      * @param string $group
      * @param string $key
      * @param bool $default
@@ -56,6 +66,12 @@ class Settings
 
     /**
      * Create a new single select setting
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group, key, options or default value fail to pass
+     *         validation. The group, key and each option must only contain in
+     *         the set [a-zA-Z0-9-_]. The default value must be in the array of
+     *         options provided.
      *
      * @param string $group
      * @param string $key
@@ -76,6 +92,12 @@ class Settings
 
     /**
      * Create a new multi select setting
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group, key, options or default value fail to pass
+     *         validation. The group, key and each option must only contain in
+     *         the set [a-zA-Z0-9-_]. Each valid in the default value array must
+     *         be included in the array of options provided
      *
      * @param string $group
      * @param string $key
@@ -98,6 +120,12 @@ class Settings
      * Ensure that there are overrides for each of the given identifiers for the
      * the setting identified by the given group and key
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or key fail to pass validation. The group and key
+     *         must only contain in the set [a-zA-Z0-9-_].
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *         When it can't find the setting for the given group and key
+     *
      * @param string $group
      * @param string $key
      * @param \Illuminate\Support\Collection $identifiers
@@ -106,6 +134,9 @@ class Settings
      */
     public static function ensureHasOverride(string $group, string $key, Collection $identifiers): void
     {
+        KeyValidator::validate($group);
+        KeyValidator::validate($key);
+
         $definition = SettingDefinition::getDefinition($group, $key);
 
         $existingOverrides = $definition->values->keyBy('identifier');
@@ -123,6 +154,12 @@ class Settings
     /**
      * Update a setting definition for the given group and key
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or key fail to pass validation. The group and key
+     *         must only contain in the set [a-zA-Z0-9-_].
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *         When it can't find the setting for the given group and key
+     *
      * @param string $group
      * @param string $key
      * @param callable $callback
@@ -131,6 +168,9 @@ class Settings
      */
     public static function update(string $group, string $key, callable $callback): void
     {
+        KeyValidator::validate($group);
+        KeyValidator::validate($key);
+
         $definition = SettingDefinition::getDefinition($group, $key);
 
         $class = substr($definition->type, strrpos($definition->type, '\\') + 1);
@@ -150,6 +190,12 @@ class Settings
     /**
      * Delete a setting definition for the given group and key
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or key fail to pass validation. The group and key
+     *         must only contain in the set [a-zA-Z0-9-_].
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *         When it can't find the setting for the given group and key
+     *
      * @param string $group
      * @param string $key
      *
@@ -157,6 +203,9 @@ class Settings
      */
     public static function delete(string $group, string $key): void
     {
+        KeyValidator::validate($group);
+        KeyValidator::validate($key);
+
         $definition = SettingDefinition::getDefinition($group, $key);
         $definition->delete();
     }

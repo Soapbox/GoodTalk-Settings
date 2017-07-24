@@ -302,4 +302,88 @@ class SettingsTest extends TestCase
         $this->expectException(ModelNotFoundException::class);
         Settings::delete('settings', 'key');
     }
+
+    /**
+     * @test
+     */
+    public function ensureHasOverrideThrowsAValidationExceptionWhenTheGroupHasADot()
+    {
+        $this->expectException(ValidationException::class);
+        Settings::ensureHasOverride('settings.wat', 'key', new Collection('1'));
+    }
+
+    /**
+     * @test
+     */
+    public function ensureHasOverrideThrowsAValidationExceptionWhenTheKeyHasADot()
+    {
+        $this->expectException(ValidationException::class);
+        Settings::ensureHasOverride('settings', 'invalid.key', new Collection('1'));
+    }
+
+    /**
+     * @test
+     */
+    public function ensureHasOverrideThrowsAModelNotFoundExceptionWhenThereIsNotSettingForTheKey()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        Settings::ensureHasOverride('settings', 'invalid_key', new Collection('1'));
+    }
+
+    /**
+     * @test
+     */
+    public function updateThrowsAValidationExceptionWhenTheGroupHasADot()
+    {
+        $this->expectException(ValidationException::class);
+        Settings::update('settings.wat', 'key', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function updateThrowsAValidationExceptionWhenTheKeyHasADot()
+    {
+        $this->expectException(ValidationException::class);
+        Settings::update('settings', 'invalid.key', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function updateThrowsAModelNotFoundExceptionWhenThereIsNotSettingForTheKey()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        Settings::update('settings', 'invalid_key', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function deleteThrowsAValidationExceptionWhenTheGroupHasADot()
+    {
+        $this->expectException(ValidationException::class);
+        Settings::delete('settings.wat', 'key');
+    }
+
+    /**
+     * @test
+     */
+    public function deleteThrowsAValidationExceptionWhenTheKeyHasADot()
+    {
+        $this->expectException(ValidationException::class);
+        Settings::delete('settings', 'invalid.key');
+    }
+
+    /**
+     * @test
+     */
+    public function deleteThrowsAModelNotFoundExceptionWhenThereIsNotSettingForTheKey()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        Settings::delete('settings', 'invalid_key');
+    }
 }
