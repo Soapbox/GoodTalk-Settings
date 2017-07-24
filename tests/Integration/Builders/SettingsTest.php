@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Models\TextSettingDefinition;
 use SoapBox\Settings\Models\BooleanSettingDefinition;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use SoapBox\Settings\Models\MultiSelectSettingDefinition;
 use SoapBox\Settings\Models\SingleSelectSettingDefinition;
 
@@ -280,5 +281,25 @@ class SettingsTest extends TestCase
         $this->assertDatabaseHas('setting_values', ['identifier' => '1', 'value' => 'override']);
         $this->assertDatabaseHas('setting_values', ['identifier' => '2', 'value' => 'default']);
         $this->assertDatabaseHas('setting_values', ['identifier' => '3', 'value' => 'default']);
+    }
+
+    /**
+     * @test
+     */
+    public function itCanDeleteASettingDefinition()
+    {
+        factory(TextSettingDefinition::class)->create();
+        Settings::delete('settings', 'key');
+
+        $this->assertDatabaseMissing('setting_definitions', ['group' => 'setting_definitions', 'key' => 'key']);
+    }
+
+    /**
+     * @test
+     */
+    public function itThrowsAModelNotFoundExceptionWhenItCantFindTheDefinitionToDelete()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        Settings::delete('settings', 'key');
     }
 }

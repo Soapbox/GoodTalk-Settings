@@ -146,4 +146,18 @@ class Settings
             $value->delete();
         });
     }
+
+    /**
+     * Delete a setting definition for the given group and key
+     *
+     * @param string $group
+     * @param string $key
+     *
+     * @return void
+     */
+    public static function delete(string $group, string $key): void
+    {
+        $definition = SettingDefinition::getDefinition($group, $key);
+        $definition->delete();
+    }
 }
