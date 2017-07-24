@@ -5,6 +5,7 @@ namespace SoapBox\Settings;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Repositories\Settings;
+use SoapBox\Settings\Utilities\KeyValidator;
 use SoapBox\Settings\Models\SettingDefinition;
 
 class Manager
@@ -20,6 +21,11 @@ class Manager
      * Ensure the setting collection for the given identifier in the given group
      * is loaded in the cache
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or identifier fail to pass validation. The group
+     *         and identifier must only contain characters in the set
+     *         [a-zA-Z0-9-_].
+     *
      * @param string $group
      * @param string $identifier
      *
@@ -34,6 +40,11 @@ class Manager
      * Ensure the setting collections for the given identifiers in the given
      * group are loaded in the cache
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or identifiers fail to pass validation. The group
+     *         and identifiers must only contain characters in the set
+     *         [a-zA-Z0-9-_].
+     *
      * @param string $group
      * @param \Illuminate\Support\Collection $identifiers
      *        A collection of string identifiers
@@ -42,11 +53,17 @@ class Manager
      */
     public function loadMultiple(string $group, Collection $identifiers): void
     {
+        KeyValidator::validate(array_merge([$group], $identifiers->all()));
         $this->getMultiple($group, $identifiers);
     }
 
     /**
      * Get the setting collection for the given identifier in the given group
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or identifier fail to pass validation. The group
+     *         and identifier must only contain characters in the set
+     *         [a-zA-Z0-9-_].
      *
      * @param string $group
      * @param string $identifier
@@ -57,11 +74,17 @@ class Manager
      */
     public function get(string $group, string $identifier): Collection
     {
+        KeyValidator::validate([$group, $identifier]);
         return $this->settings->get($group, $identifier);
     }
 
     /**
      * Get all settings for the given identifiers in the given group
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *         When the group or identifiers fail to pass validation. The group
+     *         and identifiers must only contain characters in the set
+     *         [a-zA-Z0-9-_].
      *
      * @param string $group
      * @param \Illuminate\Support\Collection $identifiers
@@ -72,11 +95,16 @@ class Manager
      */
     public function getMultiple(string $group, Collection $identifiers): Collection
     {
+        KeyValidator::validate(array_merge([$group], $identifiers->all()));
         return $this->settings->getMultiple($group, $identifiers);
     }
 
     /**
      * Save the given setting
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     *         When the given Setting's group and key does not match an existing
+     *         SettingDefinition
      *
      * @param \SoapBox\Settings\Setting $setting
      *

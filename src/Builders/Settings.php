@@ -21,8 +21,9 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group, key or default value fail to pass validation. The
-     *         group and key must only contain in the set [a-zA-Z0-9-_]. The
-     *         default value must pass the custom validation rules submitted.
+     *         group and key must only contain characters in the set
+     *         [a-zA-Z0-9-_]. The default value must pass the custom validation
+     *         rules submitted.
      *
      * @param string $group
      * @param string $key
@@ -46,7 +47,7 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
-     *         must only contain in the set [a-zA-Z0-9-_].
+     *         must only contain characters in the set [a-zA-Z0-9-_].
      *
      * @param string $group
      * @param string $key
@@ -69,9 +70,9 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group, key, options or default value fail to pass
-     *         validation. The group, key and each option must only contain in
-     *         the set [a-zA-Z0-9-_]. The default value must be in the array of
-     *         options provided.
+     *         validation. The group, key and each option must only contain
+     *         characters in the set [a-zA-Z0-9-_]. The default value must be in
+     *         the array of options provided.
      *
      * @param string $group
      * @param string $key
@@ -95,9 +96,9 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group, key, options or default value fail to pass
-     *         validation. The group, key and each option must only contain in
-     *         the set [a-zA-Z0-9-_]. Each valid in the default value array must
-     *         be included in the array of options provided
+     *         validation. The group, key and each option must only contain
+     *         characters in the set [a-zA-Z0-9-_]. Each valid in the default
+     *         value array must be included in the array of options provided.
      *
      * @param string $group
      * @param string $key
@@ -122,7 +123,7 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
-     *         must only contain in the set [a-zA-Z0-9-_].
+     *         must only contain characters in the set [a-zA-Z0-9-_].
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      *         When it can't find the setting for the given group and key
      *
@@ -134,8 +135,7 @@ class Settings
      */
     public static function ensureHasOverride(string $group, string $key, Collection $identifiers): void
     {
-        KeyValidator::validate($group);
-        KeyValidator::validate($key);
+        KeyValidator::validate([$group, $key]);
 
         $definition = SettingDefinition::getDefinition($group, $key);
 
@@ -156,7 +156,7 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
-     *         must only contain in the set [a-zA-Z0-9-_].
+     *         must only contain characters in the set [a-zA-Z0-9-_].
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      *         When it can't find the setting for the given group and key
      *
@@ -168,8 +168,7 @@ class Settings
      */
     public static function update(string $group, string $key, callable $callback): void
     {
-        KeyValidator::validate($group);
-        KeyValidator::validate($key);
+        KeyValidator::validate([$group, $key]);
 
         $definition = SettingDefinition::getDefinition($group, $key);
 
@@ -192,7 +191,7 @@ class Settings
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
-     *         must only contain in the set [a-zA-Z0-9-_].
+     *         must only contain characters in the set [a-zA-Z0-9-_].
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      *         When it can't find the setting for the given group and key
      *
@@ -203,8 +202,7 @@ class Settings
      */
     public static function delete(string $group, string $key): void
     {
-        KeyValidator::validate($group);
-        KeyValidator::validate($key);
+        KeyValidator::validate([$group, $key]);
 
         $definition = SettingDefinition::getDefinition($group, $key);
         $definition->delete();

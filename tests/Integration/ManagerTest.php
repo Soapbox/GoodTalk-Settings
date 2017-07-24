@@ -4,10 +4,13 @@ namespace Tests\Integration;
 
 use Tests\TestCase;
 use SoapBox\Settings\Manager;
+use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
+use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ManagerTest extends TestCase
 {
@@ -157,5 +160,95 @@ class ManagerTest extends TestCase
         $this->assertSame('key', $result->getKey());
         $this->assertSame('1', $result->getIdentifier());
         $this->assertSame('new_override', $result->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function loadThrowsValidationExceptionWhenTheGroupContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->load('invalid.group', 'key');
+    }
+
+    /**
+     * @test
+     */
+    public function loadThrowsValidationExceptionWhenTheIdentifierContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->load('group', 'invalid.key');
+    }
+
+    /**
+     * @test
+     */
+    public function loadMultipleThrowsValidationExceptionWhenTheGroupContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->loadMultiple('invalid.group', new Collection('key'));
+    }
+
+    /**
+     * @test
+     */
+    public function loadMultipleThrowsValidationExceptionWhenAIdentifierContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->loadMultiple('group', new Collection('invalid.key'));
+    }
+
+    /**
+     * @test
+     */
+    public function getThrowsValidationExceptionWhenTheGroupContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->get('invalid.group', 'key');
+    }
+
+    /**
+     * @test
+     */
+    public function getThrowsValidationExceptionWhenTheIdentifierContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->get('group', 'invalid.key');
+    }
+
+    /**
+     * @test
+     */
+    public function getMultipleThrowsValidationExceptionWhenTheGroupContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->getMultiple('invalid.group', new Collection('key'));
+    }
+
+    /**
+     * @test
+     */
+    public function getMultipleThrowsValidationExceptionWhenTheIdentifierContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $settings = app(Manager::class);
+        $settings->getMultiple('group', new Collection('invalid.key'));
+    }
+
+    /**
+     * @test
+     */
+    public function storeThrowsModelNotFoundExceptionWhenItCannotFindTheSettingDefinition()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        $setting = new Setting('group', 'key', '1', 'test');
+        app(Manager::class)->store($setting);
     }
 }

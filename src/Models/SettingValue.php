@@ -95,7 +95,7 @@ class SettingValue extends Model implements Validatable
      */
     public function getRules(): array
     {
-        return $this->definition->getRules();
+        return array_merge($this->definition->getRules(), ['identifier' => 'alpha-dash']);
     }
 
     /**

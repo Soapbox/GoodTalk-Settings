@@ -181,4 +181,17 @@ class SettingValueTest extends TestCase
         $this->assertSame('1', $override->fresh()->identifier);
         $this->assertSame('override', $override->fresh()->value);
     }
+
+    /**
+     * @test
+     */
+    public function itFailsCreatingASettingValueWhenTheIdentifierContainsADot()
+    {
+        $this->expectException(ValidationException::class);
+        $definition = factory(TextSettingDefinition::class)->create();
+        $override = SettingValue::create(
+            $definition,
+            ['value' => 'override', 'identifier' => '1.1']
+        );
+    }
 }

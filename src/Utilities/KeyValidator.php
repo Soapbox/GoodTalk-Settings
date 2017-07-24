@@ -9,12 +9,16 @@ class KeyValidator
     /**
      * Ensure the given key passes the alpha-dash validation
      *
-     * @param string $key
+     * @param string|array $keys
      *
      * @return void
      */
-    public static function validate(string $key): void
+    public static function validate($keys): void
     {
-        Validator::make(['key' => $key], ['key' => 'alpha-dash'])->validate();
+        if (!is_array($keys)) {
+            $keys = [$keys];
+        }
+
+        Validator::make(['keys' => $keys], ['keys.*' => 'alpha-dash'])->validate();
     }
 }
