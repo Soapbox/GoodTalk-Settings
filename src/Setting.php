@@ -10,6 +10,8 @@ class Setting
     private $key;
     private $identifier;
     private $value;
+    private $type = '';
+    private $options = [];
 
     public function __construct(string $group, string $key, string $identifier, $value)
     {
@@ -69,5 +71,49 @@ class Setting
     public function getValue()
     {
         return $this->value;
+    }
+
+    /**
+     * Set the type for this setting
+     *
+     * @param string $type
+     *
+     * @return void
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * Get the type for this setting
+     *
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set the options for this setting
+     *
+     * @param array $options
+     *
+     * @return void
+     */
+    public function setOptions(array $options): void
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Get the array of options for this setting
+     *
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }
