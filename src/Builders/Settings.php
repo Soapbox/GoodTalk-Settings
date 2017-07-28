@@ -152,7 +152,8 @@ class Settings
     }
 
     /**
-     * Update a setting definition for the given group and key
+     * Update a setting definition for the given group and key and delete any
+     * invalid override values
      *
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
