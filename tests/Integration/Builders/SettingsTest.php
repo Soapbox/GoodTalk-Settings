@@ -9,7 +9,9 @@ use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Models\TextSettingDefinition;
+use SoapBox\Settings\Exceptions\InvalidKeyException;
 use SoapBox\Settings\Models\BooleanSettingDefinition;
+use SoapBox\Settings\Exceptions\InvalidGroupException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use SoapBox\Settings\Models\MultiSelectSettingDefinition;
 use SoapBox\Settings\Models\SingleSelectSettingDefinition;
@@ -267,6 +269,25 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
+    public function ensuringOverridesThrowsInvalidGroupExceptionWhenTheGroupDoesNotExist()
+    {
+        $this->expectException(InvalidGroupException::class);
+        Settings::ensureHasOverride('invalid_group', 'key', new Collection('1'));
+    }
+
+    /**
+     * @test
+     */
+    public function ensuringOverridesThrowsInvalidKeyExceptionWhenTheKeyDoesNotExist()
+    {
+        $this->expectException(InvalidKeyException::class);
+        factory(TextSettingDefinition::class)->create();
+        Settings::ensureHasOverride('settings', 'invalid_key', new Collection('1'));
+    }
+
+    /**
+     * @test
+     */
     public function ensuringOverridesCreatesOverridesWithTheDefaultValue()
     {
         $definition = factory(TextSettingDefinition::class)->create();
@@ -297,15 +318,6 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
-    public function itThrowsAModelNotFoundExceptionWhenItCantFindTheDefinitionToDelete()
-    {
-        $this->expectException(ModelNotFoundException::class);
-        Settings::delete('settings', 'key');
-    }
-
-    /**
-     * @test
-     */
     public function ensureHasOverrideThrowsAValidationExceptionWhenTheGroupHasADot()
     {
         $this->expectException(ValidationException::class);
@@ -319,15 +331,6 @@ class SettingsTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         Settings::ensureHasOverride('settings', 'invalid.key', new Collection('1'));
-    }
-
-    /**
-     * @test
-     */
-    public function ensureHasOverrideThrowsAModelNotFoundExceptionWhenThereIsNotSettingForTheKey()
-    {
-        $this->expectException(ModelNotFoundException::class);
-        Settings::ensureHasOverride('settings', 'invalid_key', new Collection('1'));
     }
 
     /**
@@ -353,9 +356,20 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
-    public function updateThrowsAModelNotFoundExceptionWhenThereIsNotSettingForTheKey()
+    public function updateThrowsInvalidGroupExceptionWhenTheGroupDoesNotExist()
     {
-        $this->expectException(ModelNotFoundException::class);
+        $this->expectException(InvalidGroupException::class);
+        Settings::update('invalid_group', 'key', function () {
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function updateThrowsInvalidKeyExceptionWhenTheKeyDoesNotExist()
+    {
+        $this->expectException(InvalidKeyException::class);
+        factory(TextSettingDefinition::class)->create();
         Settings::update('settings', 'invalid_key', function () {
         });
     }
@@ -381,9 +395,19 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
-    public function deleteThrowsAModelNotFoundExceptionWhenThereIsNotSettingForTheKey()
+    public function deleteThrowsInvalidGroupExceptionWhenTheGroupDoesNotExist()
     {
-        $this->expectException(ModelNotFoundException::class);
-        Settings::delete('settings', 'invalid_key');
+        $this->expectException(InvalidGroupException::class);
+        Settings::delete('invalid_group', 'key', new Collection('1'));
+    }
+
+    /**
+     * @test
+     */
+    public function deleteThrowsInvalidKeyExceptionWhenTheKeyDoesNotExist()
+    {
+        $this->expectException(InvalidKeyException::class);
+        factory(TextSettingDefinition::class)->create();
+        Settings::delete('settings', 'invalid_key', new Collection('1'));
     }
 }

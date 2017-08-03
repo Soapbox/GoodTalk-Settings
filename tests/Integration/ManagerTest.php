@@ -10,6 +10,8 @@ use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
+use SoapBox\Settings\Exceptions\InvalidKeyException;
+use SoapBox\Settings\Exceptions\InvalidGroupException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ManagerTest extends TestCase
@@ -245,10 +247,21 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function storeThrowsModelNotFoundExceptionWhenItCannotFindTheSettingDefinition()
+    public function storeThrowsInvalidGroupExceptionWhenItCannotFindTheSettingDefinitionForTheGroup()
     {
-        $this->expectException(ModelNotFoundException::class);
-        $setting = new Setting('group', 'key', '1', 'test');
+        $this->expectException(InvalidGroupException::class);
+        $setting = new Setting('invalid_group', 'key', '1', 'test');
+        app(Manager::class)->store($setting);
+    }
+
+    /**
+     * @test
+     */
+    public function storeThrowsInvalidKeyExceptionWhenItCannotFindTheSettingDefinitionForTheKey()
+    {
+        factory(SettingDefinition::class)->create();
+        $this->expectException(InvalidKeyException::class);
+        $setting = new Setting('settings', 'invalid_key', '1', 'test');
         app(Manager::class)->store($setting);
     }
 }

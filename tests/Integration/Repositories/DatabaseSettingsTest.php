@@ -3,6 +3,7 @@
 namespace Tests\Integration\Repositories;
 
 use Tests\TestCase;
+use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
@@ -10,6 +11,8 @@ use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
 use SoapBox\Settings\Models\TextSettingDefinition;
 use SoapBox\Settings\Repositories\DatabaseSettings;
+use SoapBox\Settings\Exceptions\InvalidKeyException;
+use SoapBox\Settings\Exceptions\InvalidGroupException;
 use SoapBox\Settings\Models\SingleSelectSettingDefinition;
 
 class DatabaseSettingsTest extends TestCase
@@ -68,6 +71,33 @@ class DatabaseSettingsTest extends TestCase
 
         $settings = $result->get('2');
         $this->assertSame('override2', $settings->get('setting1')->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function storeThrowsInvalidGroupExceptionIfTheGroupDoesntExist()
+    {
+        $this->expectException(InvalidGroupException::class);
+
+        $setting = new Setting('invalid_group', 'key', 'identifier', 'value');
+
+        $repository = new DatabaseSettings();
+        $setting = $repository->store($setting);
+    }
+
+    /**
+     * @test
+     */
+    public function storeThrowsInvalidKeyExceptionIfTheGroupDoesntExist()
+    {
+        $this->expectException(InvalidKeyException::class);
+
+        $definition = factory(TextSettingDefinition::class)->create();
+        $setting = new Setting($definition->group, 'invalid_key', 'identifier', 'value');
+
+        $repository = new DatabaseSettings();
+        $setting = $repository->store($setting);
     }
 
     /**

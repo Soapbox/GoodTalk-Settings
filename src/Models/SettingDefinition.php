@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Builder;
 use SoapBox\Settings\Models\Mutators\Mutator;
 use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use SoapBox\Settings\Exceptions\InvalidKeyException;
 use Jaspaul\EloquentModelValidation\Traits\Validates;
+use SoapBox\Settings\Exceptions\InvalidGroupException;
 use Jaspaul\EloquentModelValidation\Contracts\Validatable;
 
 class SettingDefinition extends Model implements Validatable
@@ -48,6 +50,9 @@ class SettingDefinition extends Model implements Validatable
     /**
      * Get the setting definition for the given group and key
      *
+     * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
+     * @throws \SoapBox\Settings\Exceptions\InvalidKeyException
+     *
      * @param string $group
      * @param string $key
      *
@@ -55,7 +60,17 @@ class SettingDefinition extends Model implements Validatable
      */
     public static function getDefinition(string $group, string $key): SettingDefinition
     {
-        return self::group($group)->key($key)->firstOrFail();
+        $definitions = self::getForGroup($group)->keyBy('key');
+
+        if ($definitions->isEmpty()) {
+            throw new InvalidGroupException($group);
+        }
+
+        if (!$definitions->has($key)) {
+            throw new InvalidKeyException($key);
+        }
+
+        return $definitions->get($key);
     }
 
     /**

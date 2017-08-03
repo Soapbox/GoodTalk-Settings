@@ -124,8 +124,10 @@ class Settings
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     *         When it can't find the setting for the given group and key
+     * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
+     *         When there are no settings defined for the given group
+     * @throws \SoapBox\Settings\Exceptions\InvalidKeyException
+     *         When there is no setting defined for the given key
      *
      * @param string $group
      * @param string $key
@@ -158,8 +160,10 @@ class Settings
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     *         When it can't find the setting for the given group and key
+     * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
+     *         When there are no settings defined for the given group
+     * @throws \SoapBox\Settings\Exceptions\InvalidKeyException
+     *         When there is no setting defined for the given key
      *
      * @param string $group
      * @param string $key
@@ -193,8 +197,10 @@ class Settings
      * @throws \Illuminate\Validation\ValidationException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     *         When it can't find the setting for the given group and key
+     * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
+     *         When there are no settings defined for the given group
+     * @throws \SoapBox\Settings\Exceptions\InvalidKeyException
+     *         When there is no setting defined for the given key
      *
      * @param string $group
      * @param string $key

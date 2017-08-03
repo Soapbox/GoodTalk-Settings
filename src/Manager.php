@@ -102,9 +102,10 @@ class Manager
     /**
      * Save the given setting
      *
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
-     *         When the given Setting's group and key does not match an existing
-     *         SettingDefinition
+     * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
+     *         When there are no settings defined for the given group
+     * @throws \SoapBox\Settings\Exceptions\InvalidKeyException
+     *         When there is no setting defined for the given key
      *
      * @param \SoapBox\Settings\Setting $setting
      *
