@@ -4,6 +4,7 @@ namespace Tests\Integration\Repositories;
 
 use Tests\TestCase;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use SoapBox\Settings\Utilities\Cache;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
@@ -97,5 +98,30 @@ class CacheSettingsTest extends TestCase
         $this->assertTrue($cache->has('settings.1'));
         $this->assertTrue($cache->has('settings.2'));
         $this->assertSame('cached_value', $settings->get('setting1')->getValue());
+    }
+
+    /**
+     * @test
+     */
+    public function itDoesNotDoQueriesWhenTheRequestedSettingIsCached()
+    {
+        $settingDefinition = factory(SettingDefinition::class)->make([
+            'key' => 'setting1',
+        ]);
+
+        $cache = new ArrayCache();
+        $collection = new Collection();
+
+        $setting = SettingFactory::make('1', $settingDefinition);
+        $setting->setValue('cached_value1');
+        $collection->put('setting1', $setting);
+
+        $cache->set(Cache::toCacheKey('settings', '1'), $collection);
+
+        $repository = new CacheSettings(new DatabaseSettings(), $cache);
+
+        DB::enableQueryLog();
+        $settings = $repository->get('settings', '1');
+        $this->assertCount(0, DB::getQueryLog());
     }
 }
