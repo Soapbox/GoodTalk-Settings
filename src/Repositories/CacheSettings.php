@@ -56,7 +56,11 @@ class CacheSettings implements Settings
             return !$cachedValues->has($identifier);
         });
 
-        $missingValues = $this->parent->getMultiple($group, $missingIdentifiers);
+        if ($missingIdentifiers->isNotEmpty()) {
+            $missingValues = $this->parent->getMultiple($group, $missingIdentifiers);
+        } else {
+            $missingValues = new Collection();
+        }
 
         $this->cache->setMultiple($missingValues->mapWithKeys(function ($value, $key) use ($group) {
             return [Cache::toCacheKey($group, $key) => $value];
