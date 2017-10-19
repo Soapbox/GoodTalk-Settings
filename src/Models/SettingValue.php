@@ -17,6 +17,7 @@ class SettingValue extends Model implements Validatable
     use Validates;
 
     protected $guarded = [];
+    protected $with = ['definition'];
 
     public function __construct(array $attributes = [])
     {
