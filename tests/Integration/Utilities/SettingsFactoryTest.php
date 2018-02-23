@@ -31,9 +31,11 @@ class SettingsFactoryTest extends TestCase
         $this->assertSame('k1', $settings->get('k1')->getKey());
         $this->assertSame('v1', $settings->get('k1')->getValue());
         $this->assertSame('1', $settings->get('k1')->getIdentifier());
+        $this->assertTrue($settings->get('k1')->getIsDefaultValue());
         $this->assertSame('k2', $settings->get('k2')->getKey());
         $this->assertSame('v2', $settings->get('k2')->getValue());
         $this->assertSame('1', $settings->get('k2')->getIdentifier());
+        $this->assertTrue($settings->get('k2')->getIsDefaultValue());
     }
 
     /**
@@ -61,9 +63,11 @@ class SettingsFactoryTest extends TestCase
         $this->assertSame('k1', $settings->get('k1')->getKey());
         $this->assertSame('o1', $settings->get('k1')->getValue());
         $this->assertSame('1', $settings->get('k1')->getIdentifier());
+        $this->assertFalse($settings->get('k1')->getIsDefaultValue());
         $this->assertSame('k2', $settings->get('k2')->getKey());
         $this->assertSame('v2', $settings->get('k2')->getValue());
         $this->assertSame('1', $settings->get('k2')->getIdentifier());
+        $this->assertTrue($settings->get('k1')->getIsDefaultValue());
     }
 
     /**
@@ -96,8 +100,10 @@ class SettingsFactoryTest extends TestCase
         $this->assertSame('k1', $settings->get('k1')->getKey());
         $this->assertSame('o1', $settings->get('k1')->getValue());
         $this->assertSame('1', $settings->get('k1')->getIdentifier());
+        $this->assertFalse($settings->get('k1')->getIsDefaultValue());
         $this->assertSame('k2', $settings->get('k2')->getKey());
         $this->assertSame('o2', $settings->get('k2')->getValue());
         $this->assertSame('1', $settings->get('k2')->getIdentifier());
+        $this->assertFalse($settings->get('k2')->getIsDefaultValue());
     }
 }

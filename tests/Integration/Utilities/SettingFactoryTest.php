@@ -21,6 +21,7 @@ class SettingFactoryTest extends TestCase
         $this->assertSame('key', $setting->getKey());
         $this->assertSame('default', $setting->getValue());
         $this->assertSame('identifier', $setting->getIdentifier());
+        $this->assertTrue($setting->getIsDefaultValue());
     }
 
     /**
@@ -39,5 +40,6 @@ class SettingFactoryTest extends TestCase
         $this->assertSame('key', $setting->getKey());
         $this->assertSame('override', $setting->getValue());
         $this->assertSame('identifier', $setting->getIdentifier());
+        $this->assertFalse($setting->getIsDefaultValue());
     }
 }
