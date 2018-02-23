@@ -1,8 +1,9 @@
 #!/bin/bash
 
-DB_HOST="192.168.10.10"
-DB_USERNAME="homestead"
-DB_PASSWORD="secret"
+DB_HOST=$(cat .env | grep DB_HOST | sed s/.*=//)
+DB_USERNAME=$(cat .env | grep DB_USERNAME | sed s/.*=//)
+DB_PASSWORD=$(cat .env | grep DB_PASSWORD | sed s/.*=//)
+DB_DATABASE=$(cat .env | grep DB_DATABASE | sed s/.*=//)
 
-mysql --host=$DB_HOST --user=$DB_USERNAME --password=$DB_PASSWORD -e "DROP DATABASE IF EXISTS settings_test;"
-mysql --host=$DB_HOST --user=$DB_USERNAME --password=$DB_PASSWORD -e "CREATE DATABASE settings_test;"
+mysql --host=$DB_HOST --user=$DB_USERNAME --password=$DB_PASSWORD -e "DROP DATABASE IF EXISTS $DB_DATABASE;"
+mysql --host=$DB_HOST --user=$DB_USERNAME --password=$DB_PASSWORD -e "CREATE DATABASE $DB_DATABASE;"
