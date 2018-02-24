@@ -67,7 +67,7 @@ class SettingsFactoryTest extends TestCase
         $this->assertSame('k2', $settings->get('k2')->getKey());
         $this->assertSame('v2', $settings->get('k2')->getValue());
         $this->assertSame('1', $settings->get('k2')->getIdentifier());
-        $this->assertTrue($settings->get('k1')->getIsDefaultValue());
+        $this->assertTrue($settings->get('k2')->getIsDefaultValue());
     }
 
     /**
