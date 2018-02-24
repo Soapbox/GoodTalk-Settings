@@ -6,8 +6,25 @@ php:
 services:
   - mysql
 
+dist: trusty
+sudo: required
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+      - mysql-client
+
+before_install:
+  - sudo mysql_upgrade --force
+
 before_script:
+  - mysql -u root -e "CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret';"
+  - mysql -u root -e "GRANT ALL ON *.* TO 'homestead'@'localhost';"
+  - cp .env.travis .env
   - composer install
 
 script:
-  - ./test mysql
+  - ./test
