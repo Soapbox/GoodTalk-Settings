@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Dotenv\Dotenv;
 use SoapBox\Settings\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as BaseTestCase;
@@ -15,6 +16,20 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
         $this->withFactories(__DIR__ . '/../database/factories');
+    }
+
+    /**
+     * Resolve application implementation.
+     *
+     * @return \Illuminate\Foundation\Application
+     */
+    protected function resolveApplication()
+    {
+        $app = parent::resolveApplication();
+
+        (new Dotenv(dirname(__DIR__)))->load();
+
+        return $app;
     }
 
     /**
