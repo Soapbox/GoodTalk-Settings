@@ -13,6 +13,7 @@ class Setting
     private $value;
     private $type = '';
     private $options = [];
+    private $isDefaultValue = true;
 
     /**
      * Create a new Setting object
@@ -46,6 +47,27 @@ class Setting
     public function setValue($value): void
     {
         $this->value = $value;
+    }
+
+    /**
+     * Set whether the value is Default or not for this setting
+     * @param boolean
+     *
+     * @return void
+     */
+    public function setIsDefaultValue($isDefaultValue): void
+    {
+        $this->isDefaultValue = $isDefaultValue;
+    }
+
+    /**
+     * Get whether the value is the Default value or not
+     *
+     * @return bool
+     */
+    public function getIsDefaultValue(): bool
+    {
+        return $this->isDefaultValue;
     }
 
     /**

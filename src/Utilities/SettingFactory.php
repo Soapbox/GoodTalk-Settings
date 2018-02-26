@@ -38,6 +38,7 @@ class SettingFactory
 
         if (!is_null($value)) {
             $setting->setValue($value->value);
+            $setting->setIsDefaultValue(false);
         }
 
         return $setting;
