@@ -21,7 +21,7 @@ class Manager
      * Ensure the setting collection for the given identifier in the given group
      * is loaded in the cache
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or identifier fail to pass validation. The group
      *         and identifier must only contain characters in the set
      *         [a-zA-Z0-9-_].
@@ -40,7 +40,7 @@ class Manager
      * Ensure the setting collections for the given identifiers in the given
      * group are loaded in the cache
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or identifiers fail to pass validation. The group
      *         and identifiers must only contain characters in the set
      *         [a-zA-Z0-9-_].
@@ -59,7 +59,7 @@ class Manager
     /**
      * Get the setting collection for the given identifier in the given group
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or identifier fail to pass validation. The group
      *         and identifier must only contain characters in the set
      *         [a-zA-Z0-9-_].
@@ -80,7 +80,7 @@ class Manager
     /**
      * Get all settings for the given identifiers in the given group
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or identifiers fail to pass validation. The group
      *         and identifiers must only contain characters in the set
      *         [a-zA-Z0-9-_].

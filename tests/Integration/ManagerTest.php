@@ -3,16 +3,15 @@
 namespace Tests\Integration;
 
 use Tests\TestCase;
+use InvalidArgumentException;
 use SoapBox\Settings\Manager;
 use SoapBox\Settings\Setting;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
-use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
 use SoapBox\Settings\Exceptions\InvalidKeyException;
 use SoapBox\Settings\Exceptions\InvalidGroupException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ManagerTest extends TestCase
 {
@@ -167,45 +166,45 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function callingStoreThrowsValidationExceptionWhenTheGroupIsInvalid()
+    public function callingStoreThrowsAnInvalidArgumentExceptionWhenTheGroupIsInvalid()
     {
         $setting = new Setting('invalid.group', 'key', 'identifier', 'value');
 
         $settings = app(Manager::class);
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings->store($setting);
     }
 
     /**
      * @test
      */
-    public function callingStoreThrowsValidationExceptionWhenTheKeyIsInvalid()
+    public function callingStoreThrowsAnInvalidArgumentExceptionWhenTheKeyIsInvalid()
     {
         $setting = new Setting('group', 'invalid.key', 'identifier', 'value');
 
         $settings = app(Manager::class);
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings->store($setting);
     }
 
     /**
      * @test
      */
-    public function callingStoreThrowsValidationExceptionWhenTheIdentifierIsInvalid()
+    public function callingStoreThrowsAnInvalidArgumentExceptionWhenTheIdentifierIsInvalid()
     {
         $setting = new Setting('group', 'key', 'invalid.identifier', 'value');
 
         $settings = app(Manager::class);
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings->store($setting);
     }
 
     /**
      * @test
      */
-    public function loadThrowsValidationExceptionWhenTheGroupContainsADot()
+    public function loadThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->load('invalid.group', 'key');
     }
@@ -213,9 +212,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function loadThrowsValidationExceptionWhenTheIdentifierContainsADot()
+    public function loadThrowsAnInvalidArgumentExceptionWhenTheIdentifierContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->load('group', 'invalid.key');
     }
@@ -223,9 +222,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function loadMultipleThrowsValidationExceptionWhenTheGroupContainsADot()
+    public function loadMultipleThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->loadMultiple('invalid.group', new Collection('key'));
     }
@@ -233,9 +232,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function loadMultipleThrowsValidationExceptionWhenAIdentifierContainsADot()
+    public function loadMultipleThrowsAnInvalidArgumentExceptionWhenAIdentifierContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->loadMultiple('group', new Collection('invalid.key'));
     }
@@ -243,9 +242,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function getThrowsValidationExceptionWhenTheGroupContainsADot()
+    public function getThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->get('invalid.group', 'key');
     }
@@ -253,9 +252,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function getThrowsValidationExceptionWhenTheIdentifierContainsADot()
+    public function getThrowsAnInvalidArgumentExceptionWhenTheIdentifierContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->get('group', 'invalid.key');
     }
@@ -263,9 +262,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function getMultipleThrowsValidationExceptionWhenTheGroupContainsADot()
+    public function getMultipleThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->getMultiple('invalid.group', new Collection('key'));
     }
@@ -273,9 +272,9 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
-    public function getMultipleThrowsValidationExceptionWhenTheIdentifierContainsADot()
+    public function getMultipleThrowsAnInvalidArgumentExceptionWhenTheIdentifierContainsADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
         $settings->getMultiple('group', new Collection('invalid.key'));
     }

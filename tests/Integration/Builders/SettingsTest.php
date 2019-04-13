@@ -3,6 +3,7 @@
 namespace Tests\Integration\Builders;
 
 use Tests\TestCase;
+use InvalidArgumentException;
 use Illuminate\Support\Collection;
 use SoapBox\Settings\Builders\Settings;
 use SoapBox\Settings\Models\SettingValue;
@@ -12,7 +13,6 @@ use SoapBox\Settings\Models\TextSettingDefinition;
 use SoapBox\Settings\Exceptions\InvalidKeyException;
 use SoapBox\Settings\Models\BooleanSettingDefinition;
 use SoapBox\Settings\Exceptions\InvalidGroupException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use SoapBox\Settings\Models\MultiSelectSettingDefinition;
 use SoapBox\Settings\Models\SingleSelectSettingDefinition;
 
@@ -318,27 +318,27 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
-    public function ensureHasOverrideThrowsAValidationExceptionWhenTheGroupHasADot()
+    public function ensureHasOverrideThrowsAnInvalidArgumentExceptionWhenTheGroupHasADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         Settings::ensureHasOverride('settings.wat', 'key', new Collection('1'));
     }
 
     /**
      * @test
      */
-    public function ensureHasOverrideThrowsAValidationExceptionWhenTheKeyHasADot()
+    public function ensureHasOverrideThrowsAnInvalidArgumentExceptionWhenTheKeyHasADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         Settings::ensureHasOverride('settings', 'invalid.key', new Collection('1'));
     }
 
     /**
      * @test
      */
-    public function updateThrowsAValidationExceptionWhenTheGroupHasADot()
+    public function updateThrowsAnInvalidArgumentExceptionWhenTheGroupHasADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         Settings::update('settings.wat', 'key', function () {
         });
     }
@@ -346,9 +346,9 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
-    public function updateThrowsAValidationExceptionWhenTheKeyHasADot()
+    public function updateThrowsAnInvalidArgumentExceptionWhenTheKeyHasADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         Settings::update('settings', 'invalid.key', function () {
         });
     }
@@ -377,18 +377,18 @@ class SettingsTest extends TestCase
     /**
      * @test
      */
-    public function deleteThrowsAValidationExceptionWhenTheGroupHasADot()
+    public function deleteThrowsnInvalidArgumentExceptionWhenTheGroupHasADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         Settings::delete('settings.wat', 'key');
     }
 
     /**
      * @test
      */
-    public function deleteThrowsAValidationExceptionWhenTheKeyHasADot()
+    public function deleteThrowsnInvalidArgumentExceptionWhenTheKeyHasADot()
     {
-        $this->expectException(ValidationException::class);
+        $this->expectException(InvalidArgumentException::class);
         Settings::delete('settings', 'invalid.key');
     }
 

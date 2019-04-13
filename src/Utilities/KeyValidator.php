@@ -2,7 +2,7 @@
 
 namespace SoapBox\Settings\Utilities;
 
-use Illuminate\Support\Facades\Validator;
+use InvalidArgumentException;
 
 class KeyValidator
 {
@@ -19,6 +19,10 @@ class KeyValidator
             $keys = [$keys];
         }
 
-        Validator::make(['keys' => $keys], ['keys.*' => 'alpha-dash'])->validate();
+        foreach ($keys as $key) {
+            if (!preg_match('/^[\pL\pM\pN_-]+$/u', $key)) {
+                throw new InvalidArgumentException();
+            }
+        }
     }
 }
