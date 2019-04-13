@@ -113,6 +113,7 @@ class Manager
      */
     public function store(Setting $setting): Setting
     {
+        KeyValidator::validate([$setting->getGroup(), $setting->getKey(), $setting->getIdentifier()]);
         return $this->settings->store($setting);
     }
 }

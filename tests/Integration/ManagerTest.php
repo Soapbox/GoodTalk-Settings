@@ -167,6 +167,42 @@ class ManagerTest extends TestCase
     /**
      * @test
      */
+    public function callingStoreThrowsValidationExceptionWhenTheGroupIsInvalid()
+    {
+        $setting = new Setting('invalid.group', 'key', 'identifier', 'value');
+
+        $settings = app(Manager::class);
+        $this->expectException(ValidationException::class);
+        $settings->store($setting);
+    }
+
+    /**
+     * @test
+     */
+    public function callingStoreThrowsValidationExceptionWhenTheKeyIsInvalid()
+    {
+        $setting = new Setting('group', 'invalid.key', 'identifier', 'value');
+
+        $settings = app(Manager::class);
+        $this->expectException(ValidationException::class);
+        $settings->store($setting);
+    }
+
+    /**
+     * @test
+     */
+    public function callingStoreThrowsValidationExceptionWhenTheIdentifierIsInvalid()
+    {
+        $setting = new Setting('group', 'key', 'invalid.identifier', 'value');
+
+        $settings = app(Manager::class);
+        $this->expectException(ValidationException::class);
+        $settings->store($setting);
+    }
+
+    /**
+     * @test
+     */
     public function loadThrowsValidationExceptionWhenTheGroupContainsADot()
     {
         $this->expectException(ValidationException::class);

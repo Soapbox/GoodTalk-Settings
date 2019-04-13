@@ -29,8 +29,6 @@ class Setting
      */
     public function __construct(string $group, string $key, string $identifier, $value)
     {
-        KeyValidator::validate([$group, $key, $identifier]);
-
         $this->group = $group;
         $this->key = $key;
         $this->identifier = $identifier;
