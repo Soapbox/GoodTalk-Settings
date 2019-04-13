@@ -53,7 +53,6 @@ class Manager
      */
     public function loadMultiple(string $group, Collection $identifiers): void
     {
-        KeyValidator::validate(array_merge([$group], $identifiers->all()));
         $this->getMultiple($group, $identifiers);
     }
 
