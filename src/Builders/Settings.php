@@ -2,10 +2,7 @@
 
 namespace SoapBox\Settings\Builders;
 
-use Illuminate\Support\Str;
-use InvalidArgumentException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Validator;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Utilities\KeyValidator;
 use SoapBox\Settings\Models\SettingDefinition;
@@ -19,7 +16,7 @@ class Settings
     /**
      * Create a new text setting
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group, key or default value fail to pass validation. The
      *         group and key must only contain characters in the set
      *         [a-zA-Z0-9-_]. The default value must pass the custom validation
@@ -45,7 +42,7 @@ class Settings
     /**
      * Create a new boolean setting
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
      *
@@ -68,7 +65,7 @@ class Settings
     /**
      * Create a new single select setting
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group, key, options or default value fail to pass
      *         validation. The group, key and each option must only contain
      *         characters in the set [a-zA-Z0-9-_]. The default value must be in
@@ -94,7 +91,7 @@ class Settings
     /**
      * Create a new multi select setting
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group, key, options or default value fail to pass
      *         validation. The group, key and each option must only contain
      *         characters in the set [a-zA-Z0-9-_]. Each valid in the default
@@ -121,7 +118,7 @@ class Settings
      * Ensure that there are overrides for each of the given identifiers for the
      * the setting identified by the given group and key
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
      * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
@@ -157,7 +154,7 @@ class Settings
      * Update a setting definition for the given group and key and delete any
      * invalid override values
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
      * @throws \SoapBox\Settings\Exceptions\InvalidGroupException
@@ -194,7 +191,7 @@ class Settings
     /**
      * Delete a setting definition for the given group and key
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws \InvalidArgumentException
      *         When the group or key fail to pass validation. The group and key
      *         must only contain characters in the set [a-zA-Z0-9-_].
      * @throws \SoapBox\Settings\Exceptions\InvalidGroupException

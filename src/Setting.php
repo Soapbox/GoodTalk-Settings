@@ -18,10 +18,6 @@ class Setting
     /**
      * Create a new Setting object
      *
-     * @throws \Illuminate\Validation\ValidationException
-     *         When the group, key or identifier fail to pass validation. These
-     *         values must only contain characters in the set [a-zA-Z0-9-_].
-     *
      * @param string $group
      * @param string $key
      * @param string $identifier
@@ -29,8 +25,6 @@ class Setting
      */
     public function __construct(string $group, string $key, string $identifier, $value)
     {
-        KeyValidator::validate([$group, $key, $identifier]);
-
         $this->group = $group;
         $this->key = $key;
         $this->identifier = $identifier;
