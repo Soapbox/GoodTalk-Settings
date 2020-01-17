@@ -8,15 +8,21 @@
             "email": "justin@soapboxhq.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/soapbox/eloquent-model-validation"
+        }
+    ],
     "require": {
-        "illuminate/support": "^5.4",
-        "illuminate/database": "^5.4",
+        "illuminate/support": "^6.0",
+        "illuminate/database": "^6.0",
         "symfony/cache": "^3.3",
-        "jaspaul/eloquent-model-validation": "^0.1.1"
+        "jaspaul/eloquent-model-validation": "dev-feature/add-laravel-6-support#79a1ccd"
     },
     "require-dev": {
-        "orchestra/testbench": "^3.4",
-        "phpunit/phpunit": "~5.7",
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "~8.0",
         "fzaninotto/faker": "^1.6",
         "squizlabs/php_codesniffer": "^3.0"
     },
