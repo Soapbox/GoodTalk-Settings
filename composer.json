@@ -18,7 +18,7 @@
         "illuminate/support": "^6.0",
         "illuminate/database": "^6.0",
         "symfony/cache": "^3.3",
-        "jaspaul/eloquent-model-validation": "dev-feature/add-laravel-6-support#79a1ccd"
+        "jaspaul/eloquent-model-validation": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
