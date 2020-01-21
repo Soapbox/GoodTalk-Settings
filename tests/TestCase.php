@@ -12,7 +12,7 @@ class TestCase extends BaseTestCase
 {
     use DatabaseTransactions;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->withFactories(__DIR__ . '/../database/factories');
@@ -27,7 +27,7 @@ class TestCase extends BaseTestCase
     {
         $app = parent::resolveApplication();
 
-        (new Dotenv(dirname(__DIR__)))->load();
+        (Dotenv::create(dirname(__DIR__)))->load();
 
         return $app;
     }
