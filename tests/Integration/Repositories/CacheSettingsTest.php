@@ -9,7 +9,8 @@ use SoapBox\Settings\Utilities\Cache;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
-use Symfony\Component\Cache\Simple\ArrayCache;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Psr16Cache;
 use SoapBox\Settings\Repositories\CacheSettings;
 use SoapBox\Settings\Repositories\DatabaseSettings;
 
@@ -32,7 +33,7 @@ class CacheSettingsTest extends TestCase
             'key' => 'setting2',
         ]);
 
-        $repository = new CacheSettings(new DatabaseSettings(), new ArrayCache());
+        $repository = new CacheSettings(new DatabaseSettings(), new Psr16Cache(new ArrayAdapter()));
         $settings = $repository->get('settings', '1');
 
         $this->assertCount(2, $settings);
@@ -49,7 +50,7 @@ class CacheSettingsTest extends TestCase
             'key' => 'setting1',
         ]);
 
-        $cache = new ArrayCache();
+        $cache = new Psr16Cache(new ArrayAdapter());
         $collection = new Collection();
 
         $setting = SettingFactory::make('1', $settingDefinition1);
@@ -74,7 +75,7 @@ class CacheSettingsTest extends TestCase
             'key' => 'setting1',
         ]);
 
-        $cache = new ArrayCache();
+        $cache = new Psr16Cache(new ArrayAdapter());
         $collection = new Collection();
         $setting = SettingFactory::make('2', $settingDefinition);
         $setting->setValue('cached_value');
@@ -109,7 +110,7 @@ class CacheSettingsTest extends TestCase
             'key' => 'setting1',
         ]);
 
-        $cache = new ArrayCache();
+        $cache = new Psr16Cache(new ArrayAdapter());
         $collection = new Collection();
 
         $setting = SettingFactory::make('1', $settingDefinition);

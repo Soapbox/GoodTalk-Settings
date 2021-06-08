@@ -27,7 +27,7 @@ class TestCase extends BaseTestCase
     {
         $app = parent::resolveApplication();
 
-        (Dotenv::create(dirname(__DIR__)))->load();
+        (Dotenv::createMutable(dirname(__DIR__)))->load();
 
         return $app;
     }

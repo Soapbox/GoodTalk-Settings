@@ -38,5 +38,7 @@ class TextSettingDefinitionTest extends TestCase
             'value' => '1',
             'validation' => 'integer',
         ]);
+
+        $this->assertInstanceOf(TextSettingDefinition::class, $definition);
     }
 }
