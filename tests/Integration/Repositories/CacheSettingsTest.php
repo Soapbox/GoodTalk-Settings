@@ -6,12 +6,12 @@ use Tests\TestCase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use SoapBox\Settings\Utilities\Cache;
+use Symfony\Component\Cache\Psr16Cache;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Symfony\Component\Cache\Psr16Cache;
 use SoapBox\Settings\Repositories\CacheSettings;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use SoapBox\Settings\Repositories\DatabaseSettings;
 
 class CacheSettingsTest extends TestCase
