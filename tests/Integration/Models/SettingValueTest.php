@@ -5,7 +5,6 @@ namespace Tests\Integration\Models;
 use Tests\TestCase;
 use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
-use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Models\TextSettingDefinition;
 use SoapBox\Settings\Models\BooleanSettingDefinition;
 use SoapBox\Settings\Models\MultiSelectSettingDefinition;
@@ -189,7 +188,7 @@ class SettingValueTest extends TestCase
     {
         $this->expectException(ValidationException::class);
         $definition = TextSettingDefinition::factory()->create();
-        $override = SettingValue::create(
+        SettingValue::create(
             $definition,
             ['value' => 'override', 'identifier' => '1.1']
         );

@@ -4,7 +4,6 @@ namespace Tests\Integration\Repositories;
 
 use Tests\TestCase;
 use SoapBox\Settings\Setting;
-use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use Illuminate\Validation\ValidationException;
 use SoapBox\Settings\Models\SettingDefinition;
@@ -62,7 +61,7 @@ class DatabaseSettingsTest extends TestCase
         ]);
 
         $repository = new DatabaseSettings();
-        $result = $repository->getMultiple('settings', new Collection(['1', '2']));
+        $result = $repository->getMultiple('settings', collect(['1', '2']));
 
         $this->assertCount(2, $result);
 

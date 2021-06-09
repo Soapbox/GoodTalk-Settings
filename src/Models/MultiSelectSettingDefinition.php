@@ -3,8 +3,8 @@
 namespace SoapBox\Settings\Models;
 
 use SoapBox\Settings\Models\Mutators\Mutator;
-use SoapBox\Settings\Models\Mutators\MultiSelectMutator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use SoapBox\Settings\Models\Mutators\MultiSelectMutator;
 use SoapBox\Settings\Database\Factories\MultiSelectSettingDefinitionFactory;
 
 class MultiSelectSettingDefinition extends SettingDefinition

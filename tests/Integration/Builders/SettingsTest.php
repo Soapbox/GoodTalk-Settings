@@ -117,7 +117,7 @@ class SettingsTest extends TestCase
     public function itFailsToUpdateASingleSelectSettingWhenItIsInAnInvalidState()
     {
         $this->expectException(ValidationException::class);
-        $definition = SingleSelectSettingDefinition::factory()->create();
+        SingleSelectSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option1');
@@ -146,7 +146,7 @@ class SettingsTest extends TestCase
     public function itFailsToUpdateAMultiSelectSettingWhenItIsInAnInvalidState()
     {
         $this->expectException(ValidationException::class);
-        $definition = MultiSelectSettingDefinition::factory()->create();
+        MultiSelectSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option1');
@@ -175,7 +175,7 @@ class SettingsTest extends TestCase
     public function itFailsSavingTheSettingDefinitionIfTheDefaultNoLongerPassesTheCustomValidation()
     {
         $this->expectException(ValidationException::class);
-        $definition = TextSettingDefinition::factory()->create(['value' => 'not.valid']);
+        TextSettingDefinition::factory()->create(['value' => 'not.valid']);
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setValidation('alpha-dash');
@@ -297,7 +297,7 @@ class SettingsTest extends TestCase
             'value' => 'override',
         ]);
 
-        Settings::ensureHasOverride('settings', 'key', new Collection(['1', '2', '3']));
+        Settings::ensureHasOverride('settings', 'key', collect(['1', '2', '3']));
 
         $this->assertDatabaseHas('setting_values', ['identifier' => '1', 'value' => 'override']);
         $this->assertDatabaseHas('setting_values', ['identifier' => '2', 'value' => 'default']);
@@ -321,7 +321,7 @@ class SettingsTest extends TestCase
     public function ensureHasOverrideThrowsAnInvalidArgumentExceptionWhenTheGroupHasADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        Settings::ensureHasOverride('settings.wat', 'key', new Collection('1'));
+        Settings::ensureHasOverride('settings.wat', 'key', collect('1'));
     }
 
     /**
@@ -330,7 +330,7 @@ class SettingsTest extends TestCase
     public function ensureHasOverrideThrowsAnInvalidArgumentExceptionWhenTheKeyHasADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        Settings::ensureHasOverride('settings', 'invalid.key', new Collection('1'));
+        Settings::ensureHasOverride('settings', 'invalid.key', collect('1'));
     }
 
     /**
@@ -398,7 +398,7 @@ class SettingsTest extends TestCase
     public function deleteThrowsInvalidGroupExceptionWhenTheGroupDoesNotExist()
     {
         $this->expectException(InvalidGroupException::class);
-        Settings::delete('invalid_group', 'key', new Collection('1'));
+        Settings::delete('invalid_group', 'key', collect('1'));
     }
 
     /**
@@ -408,6 +408,6 @@ class SettingsTest extends TestCase
     {
         $this->expectException(InvalidKeyException::class);
         TextSettingDefinition::factory()->create();
-        Settings::delete('settings', 'invalid_key', new Collection('1'));
+        Settings::delete('settings', 'invalid_key', collect('1'));
     }
 }

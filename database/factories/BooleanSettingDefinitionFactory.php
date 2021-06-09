@@ -1,8 +1,8 @@
 <?php
 namespace SoapBox\Settings\Database\Factories;
 
-use SoapBox\Settings\Models\BooleanSettingDefinition;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use SoapBox\Settings\Models\BooleanSettingDefinition;
 
 class BooleanSettingDefinitionFactory extends Factory
 {

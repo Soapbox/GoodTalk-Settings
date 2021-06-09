@@ -3,7 +3,6 @@
 namespace Tests\Integration\Utilities;
 
 use Tests\TestCase;
-use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingsGroupFactory;
@@ -15,7 +14,7 @@ class SettingsGroupFactoryTest extends TestCase
      */
     public function itCreatesACollectionsOfSettingsKeyedByTheirIdentifiers()
     {
-        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
+        $definitions = collect()->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
         ]))->push(SettingDefinition::factory()->create([
@@ -23,7 +22,7 @@ class SettingsGroupFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push(SettingValue::factory()->create([
+        $overrides = collect()->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => 'identifier1',
             'value' => 'o1',
@@ -34,7 +33,7 @@ class SettingsGroupFactoryTest extends TestCase
             'value' => 'o2',
         ]));
 
-        $identifiers = new Collection(['identifier1', 'identifier2']);
+        $identifiers = collect(['identifier1', 'identifier2']);
 
         $settingGroup = SettingsGroupFactory::make($identifiers, $definitions, $overrides);
 
@@ -66,18 +65,18 @@ class SettingsGroupFactoryTest extends TestCase
      */
     public function itOnlyUsesOverridesForTheProvidedIdentifiers()
     {
-        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
+        $definitions = collect()->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
         ]));
 
-        $overrides = (new Collection())->push(SettingValue::factory()->create([
+        $overrides = collect()->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => 'id1',
             'value' => 'o1',
         ]));
 
-        $identifiers = new Collection(['identifier1']);
+        $identifiers = collect(['identifier1']);
 
         $settingGroup = SettingsGroupFactory::make($identifiers, $definitions, $overrides);
 

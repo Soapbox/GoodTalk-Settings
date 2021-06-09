@@ -1,8 +1,8 @@
 <?php
 namespace SoapBox\Settings\Database\Factories;
 
-use SoapBox\Settings\Models\MultiSelectSettingDefinition;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use SoapBox\Settings\Models\MultiSelectSettingDefinition;
 
 class MultiSelectSettingDefinitionFactory extends Factory
 {

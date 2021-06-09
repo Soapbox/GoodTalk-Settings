@@ -3,8 +3,8 @@
 namespace SoapBox\Settings\Models;
 
 use SoapBox\Settings\Models\Mutators\Mutator;
-use SoapBox\Settings\Models\Mutators\SingleSelectMutator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use SoapBox\Settings\Models\Mutators\SingleSelectMutator;
 use SoapBox\Settings\Database\Factories\SingleSelectSettingDefinitionFactory;
 
 class SingleSelectSettingDefinition extends SettingDefinition

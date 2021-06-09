@@ -3,7 +3,6 @@ namespace SoapBox\Settings\Database\Factories;
 
 use SoapBox\Settings\Models\SettingDefinition;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
 
 class SettingDefinitionFactory extends Factory
 {

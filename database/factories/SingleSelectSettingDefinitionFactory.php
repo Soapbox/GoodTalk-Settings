@@ -1,8 +1,8 @@
 <?php
 namespace SoapBox\Settings\Database\Factories;
 
-use SoapBox\Settings\Models\SingleSelectSettingDefinition;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use SoapBox\Settings\Models\SingleSelectSettingDefinition;
 
 class SingleSelectSettingDefinitionFactory extends Factory
 {

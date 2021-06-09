@@ -3,7 +3,6 @@
 namespace Tests\Integration\Utilities;
 
 use Tests\TestCase;
-use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingsFactory;
@@ -15,8 +14,7 @@ class SettingsFactoryTest extends TestCase
      */
     public function itCanMakeSettingsWithoutOverrides()
     {
-        $definitions = new Collection();
-        $definitions->push(SettingDefinition::factory()->make([
+        $definitions = collect()->push(SettingDefinition::factory()->make([
             'key' => 'k1',
             'value' => 'v1',
         ]));
@@ -25,7 +23,7 @@ class SettingsFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $settings = SettingsFactory::make('1', $definitions, new Collection());
+        $settings = SettingsFactory::make('1', $definitions, collect());
 
         $this->assertCount(2, $settings);
         $this->assertSame('k1', $settings->get('k1')->getKey());
@@ -43,7 +41,7 @@ class SettingsFactoryTest extends TestCase
      */
     public function itCanMakeSettingsWithSomeOverrides()
     {
-        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
+        $definitions = collect()->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
         ]))->push(SettingDefinition::factory()->create([
@@ -51,7 +49,7 @@ class SettingsFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push(SettingValue::factory()->create([
+        $overrides = collect()->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => '1',
             'value' => 'o1',
@@ -75,7 +73,7 @@ class SettingsFactoryTest extends TestCase
      */
     public function itCanMakeSettingsWithOverrides()
     {
-        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
+        $definitions = collect()->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
         ]))->push(SettingDefinition::factory()->create([
@@ -83,7 +81,7 @@ class SettingsFactoryTest extends TestCase
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push(SettingValue::factory()->create([
+        $overrides = collect()->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => '1',
             'value' => 'o1',

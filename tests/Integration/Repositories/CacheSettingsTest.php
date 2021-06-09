@@ -3,7 +3,6 @@
 namespace Tests\Integration\Repositories;
 
 use Tests\TestCase;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use SoapBox\Settings\Utilities\Cache;
 use Symfony\Component\Cache\Psr16Cache;
@@ -51,11 +50,10 @@ class CacheSettingsTest extends TestCase
         ]);
 
         $cache = new Psr16Cache(new ArrayAdapter());
-        $collection = new Collection();
 
         $setting = SettingFactory::make('1', $settingDefinition1);
         $setting->setValue('cached_value1');
-        $collection->put('setting1', $setting);
+        $collection = collect()->put('setting1', $setting);
 
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
@@ -76,16 +74,14 @@ class CacheSettingsTest extends TestCase
         ]);
 
         $cache = new Psr16Cache(new ArrayAdapter());
-        $collection = new Collection();
         $setting = SettingFactory::make('2', $settingDefinition);
         $setting->setValue('cached_value');
-        $collection->put('setting1', $setting);
+        $collection = collect()->put('setting1', $setting);
         $cache->set(Cache::toCacheKey('settings', '2'), $collection);
 
-        $collection = new Collection();
         $setting = SettingFactory::make('1', $settingDefinition);
         $setting->setValue('cached_value');
-        $collection->put('setting1', $setting);
+        $collection= collect()->put('setting1', $setting);
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
         $repository = new CacheSettings(new DatabaseSettings(), $cache);
@@ -111,18 +107,17 @@ class CacheSettingsTest extends TestCase
         ]);
 
         $cache = new Psr16Cache(new ArrayAdapter());
-        $collection = new Collection();
 
         $setting = SettingFactory::make('1', $settingDefinition);
         $setting->setValue('cached_value1');
-        $collection->put('setting1', $setting);
+        $collection = collect()->put('setting1', $setting);
 
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
         $repository = new CacheSettings(new DatabaseSettings(), $cache);
 
         DB::enableQueryLog();
-        $settings = $repository->get('settings', '1');
+        $repository->get('settings', '1');
         $this->assertCount(0, DB::getQueryLog());
     }
 }

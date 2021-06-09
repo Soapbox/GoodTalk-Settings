@@ -23,7 +23,7 @@ class TextSettingDefinitionTest extends TestCase
     public function itFailsWhenTheValueDoesNotPassTheCustomValidationRules()
     {
         $this->expectException(ValidationException::class);
-        $definition = TextSettingDefinition::factory()->create([
+        TextSettingDefinition::factory()->create([
             'value' => 'test_value',
             'validation' => 'integer',
         ]);

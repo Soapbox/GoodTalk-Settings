@@ -6,7 +6,6 @@ use Tests\TestCase;
 use InvalidArgumentException;
 use SoapBox\Settings\Manager;
 use SoapBox\Settings\Setting;
-use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
@@ -69,7 +68,7 @@ class ManagerTest extends TestCase
         ]);
 
         $settings = app(Manager::class);
-        $result = $settings->getMultiple('settings', new Collection(['1', '2', '3']));
+        $result = $settings->getMultiple('settings', collect(['1', '2', '3']));
 
         $this->assertCount(3, $result);
         $this->assertSame('override1', $result->get('1')->get('setting1')->getValue());
@@ -110,7 +109,7 @@ class ManagerTest extends TestCase
             'value' => 'default',
         ]);
         $settings = app(Manager::class);
-        $settings->loadMultiple('settings', new Collection('1'));
+        $settings->loadMultiple('settings', collect('1'));
 
         $definition->value = 'new_value';
         $definition->save();
@@ -226,7 +225,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->loadMultiple('invalid.group', new Collection('key'));
+        $settings->loadMultiple('invalid.group', collect('key'));
     }
 
     /**
@@ -236,7 +235,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->loadMultiple('group', new Collection('invalid.key'));
+        $settings->loadMultiple('group', collect('invalid.key'));
     }
 
     /**
@@ -266,7 +265,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->getMultiple('invalid.group', new Collection('key'));
+        $settings->getMultiple('invalid.group', collect('key'));
     }
 
     /**
@@ -276,7 +275,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->getMultiple('group', new Collection('invalid.key'));
+        $settings->getMultiple('group', collect('invalid.key'));
     }
 
     /**

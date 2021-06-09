@@ -11,7 +11,7 @@ class BooleanMutator extends Mutator
      *
      * @return bool
      */
-    public function deserializeValue(string $value)
+    public function deserializeValue(string $value): bool
     {
         return $value === 'true';
     }

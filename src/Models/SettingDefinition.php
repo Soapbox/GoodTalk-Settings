@@ -3,11 +3,9 @@
 namespace SoapBox\Settings\Models;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-
 use SoapBox\Settings\Models\Mutators\Mutator;
 use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -145,7 +143,7 @@ class SettingDefinition extends Model implements Validatable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function newQuery()
+    public function newQuery(): Builder
     {
         $builder = parent::newQuery();
 
