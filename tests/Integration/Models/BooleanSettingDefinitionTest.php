@@ -12,7 +12,7 @@ class BooleanSettingDefinitionTest extends TestCase
      */
     public function itSuccessfullyMutatesTheTrueValueOfABooleanSetting()
     {
-        $definition = factory(BooleanSettingDefinition::class)->create(['value' => true]);
+        $definition = BooleanSettingDefinition::factory()->create(['value' => true]);
         $this->assertSame(true, $definition->fresh()->value);
     }
 
@@ -21,7 +21,7 @@ class BooleanSettingDefinitionTest extends TestCase
      */
     public function itSuccessfullyMutatesTheFalseValueOfABooleanSetting()
     {
-        $definition = factory(BooleanSettingDefinition::class)->create(['value' => false]);
+        $definition = BooleanSettingDefinition::factory()->create(['value' => false]);
         $this->assertSame(false, $definition->fresh()->value);
     }
 }

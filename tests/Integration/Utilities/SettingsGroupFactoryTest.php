@@ -15,20 +15,20 @@ class SettingsGroupFactoryTest extends TestCase
      */
     public function itCreatesACollectionsOfSettingsKeyedByTheirIdentifiers()
     {
-        $definitions = (new Collection())->push(factory(SettingDefinition::class)->create([
+        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
-        ]))->push(factory(SettingDefinition::class)->create([
+        ]))->push(SettingDefinition::factory()->create([
             'key' => 'k2',
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+        $overrides = (new Collection())->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => 'identifier1',
             'value' => 'o1',
         ]))
-        ->push(factory(SettingValue::class)->make([
+        ->push(SettingValue::factory()->make([
             'setting_definition_id' => $definitions->get(1)->id,
             'identifier' => 'identifier2',
             'value' => 'o2',
@@ -66,12 +66,12 @@ class SettingsGroupFactoryTest extends TestCase
      */
     public function itOnlyUsesOverridesForTheProvidedIdentifiers()
     {
-        $definitions = (new Collection())->push(factory(SettingDefinition::class)->create([
+        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
         ]));
 
-        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+        $overrides = (new Collection())->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => 'id1',
             'value' => 'o1',

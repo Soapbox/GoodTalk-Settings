@@ -21,15 +21,15 @@ class CacheSettingsTest extends TestCase
      */
     public function itFetchesFromTheDatabaseWhenTheCacheIsEmpty()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
         ]);
-        factory(SettingDefinition::class)->create([
+        SettingDefinition::factory()->create([
             'key' => 'setting2',
         ]);
 
@@ -46,7 +46,7 @@ class CacheSettingsTest extends TestCase
      */
     public function itFetchesFromTheCacheWhenTheCacheContainsTheSettings()
     {
-        $settingDefinition1 = factory(SettingDefinition::class)->make([
+        $settingDefinition1 = SettingDefinition::factory()->make([
             'key' => 'setting1',
         ]);
 
@@ -71,7 +71,7 @@ class CacheSettingsTest extends TestCase
      */
     public function itDeletesTheSettingsForTheIdentifierWhenStoringASetting()
     {
-        $settingDefinition = factory(SettingDefinition::class)->create([
+        $settingDefinition = SettingDefinition::factory()->create([
             'key' => 'setting1',
         ]);
 
@@ -106,7 +106,7 @@ class CacheSettingsTest extends TestCase
      */
     public function itDoesNotDoQueriesWhenTheRequestedSettingIsCached()
     {
-        $settingDefinition = factory(SettingDefinition::class)->make([
+        $settingDefinition = SettingDefinition::factory()->make([
             'key' => 'setting1',
         ]);
 

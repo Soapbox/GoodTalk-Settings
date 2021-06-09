@@ -13,7 +13,7 @@ class BooleanSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanUpdateTheDefaultValue()
     {
-        $definition = factory(BooleanSettingDefinition::class)->make([
+        $definition = BooleanSettingDefinition::factory()->make([
             'value' => true,
         ]);
 

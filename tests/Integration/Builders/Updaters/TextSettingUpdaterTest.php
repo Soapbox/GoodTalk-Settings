@@ -13,7 +13,7 @@ class TextSettingUpdaterTest extends TestCase
      */
     public function itCanUpdateTheDefaultValue()
     {
-        $definition = factory(TextSettingDefinition::class)->make([
+        $definition = TextSettingDefinition::factory()->make([
             'value' => 'default',
         ]);
 
@@ -28,7 +28,7 @@ class TextSettingUpdaterTest extends TestCase
      */
     public function itCanUpdateTheValidationRules()
     {
-        $definition = factory(TextSettingDefinition::class)->make([
+        $definition = TextSettingDefinition::factory()->make([
             'value' => 'default',
         ]);
 

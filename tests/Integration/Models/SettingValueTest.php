@@ -19,10 +19,10 @@ class SettingValueTest extends TestCase
     public function itFailsCreatingATextSettingWhenTheValueDoesNotPassCustomValidation()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(TextSettingDefinition::class)->create([
+        $definition = TextSettingDefinition::factory()->create([
             'validation' => 'alpha-dash',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'override.value',
         ]);
@@ -34,10 +34,10 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyCreatesATextSettingWhenTheValuePassesCustomValidation()
     {
-        $definition = factory(TextSettingDefinition::class)->create([
+        $definition = TextSettingDefinition::factory()->create([
             'validation' => 'alpha-dash',
         ]);
-        $override = factory(SettingValue::class)->create([
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'override-value',
         ]);
@@ -50,10 +50,10 @@ class SettingValueTest extends TestCase
     public function itFailsCreatingASingleSelectSettingWhenTheValueIsNotInTheOptions()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(SingleSelectSettingDefinition::class)->create([
+        $definition = SingleSelectSettingDefinition::factory()->create([
             'options' => ['option1', 'option2'],
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'invalid',
         ]);
@@ -65,10 +65,10 @@ class SettingValueTest extends TestCase
     public function itFailsCreatingAMultiSelectSettingWhenAValueIsNotAnArray()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(MultiSelectSettingDefinition::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create([
             'options' => ['option1', 'option2'],
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'option1',
         ]);
@@ -80,10 +80,10 @@ class SettingValueTest extends TestCase
     public function itFailsCreatingAMultiSelectSettingWhenAValueIsNotInTheOptions()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(MultiSelectSettingDefinition::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create([
             'options' => ['option1', 'option2'],
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => ['option1', 'invalid'],
         ]);
@@ -94,8 +94,8 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyMutatesTheValueOfATextSetting()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = TextSettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'override',
         ]);
@@ -107,8 +107,8 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyMutatesTheTrueValueOfABooleanSetting()
     {
-        $definition = factory(BooleanSettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = BooleanSettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => true,
         ]);
@@ -120,8 +120,8 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyMutatesTheFalseValueOfABooleanSetting()
     {
-        $definition = factory(BooleanSettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = BooleanSettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => false,
         ]);
@@ -133,8 +133,8 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyMutatesTheValueOfASingleSelectSetting()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = SingleSelectSettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'option1',
         ]);
@@ -146,8 +146,8 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyMutatesASingleValueOfAMultiSelectSetting()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => ['option1'],
         ]);
@@ -159,8 +159,8 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyMutatesMultipleValuesOfAMultiSelectSetting()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => ['option1', 'option2'],
         ]);
@@ -172,7 +172,7 @@ class SettingValueTest extends TestCase
      */
     public function itSuccessfullyCreatesASettingValue()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
+        $definition = TextSettingDefinition::factory()->create();
         $override = SettingValue::create(
             $definition,
             ['value' => 'override', 'identifier' => '1']
@@ -188,7 +188,7 @@ class SettingValueTest extends TestCase
     public function itFailsCreatingASettingValueWhenTheIdentifierContainsADot()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(TextSettingDefinition::class)->create();
+        $definition = TextSettingDefinition::factory()->create();
         $override = SettingValue::create(
             $definition,
             ['value' => 'override', 'identifier' => '1.1']

@@ -20,17 +20,17 @@ class ManagerTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForASingleIdentifier()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
         ]);
 
-        factory(SettingDefinition::class)->create([
+        SettingDefinition::factory()->create([
             'key' => 'setting2',
             'value' => 'default',
         ]);
@@ -48,21 +48,21 @@ class ManagerTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForAManyIdentifier()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override1',
         ]);
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'group' => 'settings',
             'key' => 'setting2',
             'value' => 'default',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'override2',
@@ -85,7 +85,7 @@ class ManagerTest extends TestCase
      */
     public function callingLoadWarmsUpTheCache()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
@@ -105,7 +105,7 @@ class ManagerTest extends TestCase
      */
     public function callingLoadMultipleWarmsUpTheCache()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
@@ -125,7 +125,7 @@ class ManagerTest extends TestCase
      */
     public function callingStoreSavesTheSetting()
     {
-        $definition = factory(SettingDefinition::class)->create();
+        $definition = SettingDefinition::factory()->create();
 
         $setting = SettingFactory::make('1', $definition);
         $setting->setValue('override');
@@ -145,8 +145,8 @@ class ManagerTest extends TestCase
      */
     public function callingStoreUpdatesTheSetting()
     {
-        $definition = factory(SettingDefinition::class)->create();
-        factory(SettingValue::class)->create([
+        $definition = SettingDefinition::factory()->create();
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
         ]);
 
@@ -294,7 +294,7 @@ class ManagerTest extends TestCase
      */
     public function storeThrowsInvalidKeyExceptionWhenItCannotFindTheSettingDefinitionForTheKey()
     {
-        factory(SettingDefinition::class)->create();
+        SettingDefinition::factory()->create();
         $this->expectException(InvalidKeyException::class);
         $setting = new Setting('settings', 'invalid_key', '1', 'test');
         app(Manager::class)->store($setting);
