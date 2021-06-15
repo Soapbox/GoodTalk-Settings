@@ -2,8 +2,6 @@
 
 namespace SoapBox\Settings\Models\Mutators;
 
-use Illuminate\Support\Facades\Validator;
-
 class MultiSelectMutator extends Mutator
 {
     /**

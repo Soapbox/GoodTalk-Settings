@@ -28,7 +28,7 @@ class CacheSettings implements Settings
      */
     public function get(string $group, string $identifier): Collection
     {
-        return $this->getMultiple($group, new Collection($identifier))->get($identifier);
+        return $this->getMultiple($group, collect($identifier))->get($identifier);
     }
 
     /**
@@ -46,7 +46,7 @@ class CacheSettings implements Settings
             return Cache::toCacheKey($group, $identifier);
         });
 
-        $cachedValues = (new Collection($this->cache->getMultiple($keys)))
+        $cachedValues = collect($this->cache->getMultiple($keys))
             ->filter()
             ->mapWithKeys(function ($value, $key) {
                 return [Cache::cacheKeyToIdentifier($key) => $value];
@@ -59,7 +59,7 @@ class CacheSettings implements Settings
         if ($missingIdentifiers->isNotEmpty()) {
             $missingValues = $this->parent->getMultiple($group, $missingIdentifiers);
         } else {
-            $missingValues = new Collection();
+            $missingValues = collect();
         }
 
         $this->cache->setMultiple($missingValues->mapWithKeys(function ($value, $key) use ($group) {

@@ -22,7 +22,7 @@ class DatabaseSettings implements Settings
      */
     public function get(string $group, string $identifier): Collection
     {
-        return $this->getMultiple($group, new Collection($identifier))->get($identifier);
+        return $this->getMultiple($group, collect($identifier))->get($identifier);
     }
 
     /**

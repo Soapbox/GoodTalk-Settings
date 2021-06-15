@@ -3,14 +3,14 @@
 namespace Tests\Integration\Repositories;
 
 use Tests\TestCase;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use SoapBox\Settings\Utilities\Cache;
+use Symfony\Component\Cache\Psr16Cache;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
-use Symfony\Component\Cache\Simple\ArrayCache;
 use SoapBox\Settings\Repositories\CacheSettings;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use SoapBox\Settings\Repositories\DatabaseSettings;
 
 class CacheSettingsTest extends TestCase
@@ -20,19 +20,19 @@ class CacheSettingsTest extends TestCase
      */
     public function itFetchesFromTheDatabaseWhenTheCacheIsEmpty()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
         ]);
-        factory(SettingDefinition::class)->create([
+        SettingDefinition::factory()->create([
             'key' => 'setting2',
         ]);
 
-        $repository = new CacheSettings(new DatabaseSettings(), new ArrayCache());
+        $repository = new CacheSettings(new DatabaseSettings(), new Psr16Cache(new ArrayAdapter()));
         $settings = $repository->get('settings', '1');
 
         $this->assertCount(2, $settings);
@@ -45,16 +45,15 @@ class CacheSettingsTest extends TestCase
      */
     public function itFetchesFromTheCacheWhenTheCacheContainsTheSettings()
     {
-        $settingDefinition1 = factory(SettingDefinition::class)->make([
+        $settingDefinition1 = SettingDefinition::factory()->make([
             'key' => 'setting1',
         ]);
 
-        $cache = new ArrayCache();
-        $collection = new Collection();
+        $cache = new Psr16Cache(new ArrayAdapter());
 
         $setting = SettingFactory::make('1', $settingDefinition1);
         $setting->setValue('cached_value1');
-        $collection->put('setting1', $setting);
+        $collection = collect()->put('setting1', $setting);
 
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
@@ -70,21 +69,19 @@ class CacheSettingsTest extends TestCase
      */
     public function itDeletesTheSettingsForTheIdentifierWhenStoringASetting()
     {
-        $settingDefinition = factory(SettingDefinition::class)->create([
+        $settingDefinition = SettingDefinition::factory()->create([
             'key' => 'setting1',
         ]);
 
-        $cache = new ArrayCache();
-        $collection = new Collection();
+        $cache = new Psr16Cache(new ArrayAdapter());
         $setting = SettingFactory::make('2', $settingDefinition);
         $setting->setValue('cached_value');
-        $collection->put('setting1', $setting);
+        $collection = collect()->put('setting1', $setting);
         $cache->set(Cache::toCacheKey('settings', '2'), $collection);
 
-        $collection = new Collection();
         $setting = SettingFactory::make('1', $settingDefinition);
         $setting->setValue('cached_value');
-        $collection->put('setting1', $setting);
+        $collection= collect()->put('setting1', $setting);
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
         $repository = new CacheSettings(new DatabaseSettings(), $cache);
@@ -105,23 +102,22 @@ class CacheSettingsTest extends TestCase
      */
     public function itDoesNotDoQueriesWhenTheRequestedSettingIsCached()
     {
-        $settingDefinition = factory(SettingDefinition::class)->make([
+        $settingDefinition = SettingDefinition::factory()->make([
             'key' => 'setting1',
         ]);
 
-        $cache = new ArrayCache();
-        $collection = new Collection();
+        $cache = new Psr16Cache(new ArrayAdapter());
 
         $setting = SettingFactory::make('1', $settingDefinition);
         $setting->setValue('cached_value1');
-        $collection->put('setting1', $setting);
+        $collection = collect()->put('setting1', $setting);
 
         $cache->set(Cache::toCacheKey('settings', '1'), $collection);
 
         $repository = new CacheSettings(new DatabaseSettings(), $cache);
 
         DB::enableQueryLog();
-        $settings = $repository->get('settings', '1');
+        $repository->get('settings', '1');
         $this->assertCount(0, DB::getQueryLog());
     }
 }

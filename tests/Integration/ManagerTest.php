@@ -6,7 +6,6 @@ use Tests\TestCase;
 use InvalidArgumentException;
 use SoapBox\Settings\Manager;
 use SoapBox\Settings\Setting;
-use Illuminate\Support\Collection;
 use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Models\SettingDefinition;
 use SoapBox\Settings\Utilities\SettingFactory;
@@ -20,17 +19,17 @@ class ManagerTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForASingleIdentifier()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
         ]);
 
-        factory(SettingDefinition::class)->create([
+        SettingDefinition::factory()->create([
             'key' => 'setting2',
             'value' => 'default',
         ]);
@@ -48,28 +47,28 @@ class ManagerTest extends TestCase
      */
     public function itCanGetAllSettingsWithOverridesForAManyIdentifier()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override1',
         ]);
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'group' => 'settings',
             'key' => 'setting2',
             'value' => 'default',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'override2',
         ]);
 
         $settings = app(Manager::class);
-        $result = $settings->getMultiple('settings', new Collection(['1', '2', '3']));
+        $result = $settings->getMultiple('settings', collect(['1', '2', '3']));
 
         $this->assertCount(3, $result);
         $this->assertSame('override1', $result->get('1')->get('setting1')->getValue());
@@ -85,7 +84,7 @@ class ManagerTest extends TestCase
      */
     public function callingLoadWarmsUpTheCache()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
@@ -105,12 +104,12 @@ class ManagerTest extends TestCase
      */
     public function callingLoadMultipleWarmsUpTheCache()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
             'value' => 'default',
         ]);
         $settings = app(Manager::class);
-        $settings->loadMultiple('settings', new Collection('1'));
+        $settings->loadMultiple('settings', collect('1'));
 
         $definition->value = 'new_value';
         $definition->save();
@@ -125,7 +124,7 @@ class ManagerTest extends TestCase
      */
     public function callingStoreSavesTheSetting()
     {
-        $definition = factory(SettingDefinition::class)->create();
+        $definition = SettingDefinition::factory()->create();
 
         $setting = SettingFactory::make('1', $definition);
         $setting->setValue('override');
@@ -145,8 +144,8 @@ class ManagerTest extends TestCase
      */
     public function callingStoreUpdatesTheSetting()
     {
-        $definition = factory(SettingDefinition::class)->create();
-        factory(SettingValue::class)->create([
+        $definition = SettingDefinition::factory()->create();
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
         ]);
 
@@ -226,7 +225,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->loadMultiple('invalid.group', new Collection('key'));
+        $settings->loadMultiple('invalid.group', collect('key'));
     }
 
     /**
@@ -236,7 +235,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->loadMultiple('group', new Collection('invalid.key'));
+        $settings->loadMultiple('group', collect('invalid.key'));
     }
 
     /**
@@ -266,7 +265,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->getMultiple('invalid.group', new Collection('key'));
+        $settings->getMultiple('invalid.group', collect('key'));
     }
 
     /**
@@ -276,7 +275,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $settings = app(Manager::class);
-        $settings->getMultiple('group', new Collection('invalid.key'));
+        $settings->getMultiple('group', collect('invalid.key'));
     }
 
     /**
@@ -294,7 +293,7 @@ class ManagerTest extends TestCase
      */
     public function storeThrowsInvalidKeyExceptionWhenItCannotFindTheSettingDefinitionForTheKey()
     {
-        factory(SettingDefinition::class)->create();
+        SettingDefinition::factory()->create();
         $this->expectException(InvalidKeyException::class);
         $setting = new Setting('settings', 'invalid_key', '1', 'test');
         app(Manager::class)->store($setting);

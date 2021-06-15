@@ -2,9 +2,6 @@
 
 namespace SoapBox\Settings;
 
-use SoapBox\Settings\Utilities\KeyValidator;
-use SoapBox\Settings\Models\SettingDefinition;
-
 class Setting
 {
     private $group;

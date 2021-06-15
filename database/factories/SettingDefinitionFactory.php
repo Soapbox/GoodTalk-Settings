@@ -1,18 +1,31 @@
 <?php
+namespace SoapBox\Settings\Database\Factories;
 
-use Faker\Generator;
 use SoapBox\Settings\Models\SettingDefinition;
-use SoapBox\Settings\Models\TextSettingDefinition;
-use SoapBox\Settings\Models\BooleanSettingDefinition;
-use SoapBox\Settings\Models\MultiSelectSettingDefinition;
-use SoapBox\Settings\Models\SingleSelectSettingDefinition;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
-$factory->define(SettingDefinition::class, function (Generator $faker) {
-    return [
-        'group' => 'settings',
-        'key' => 'key',
-        'type' => 'type',
-        'value' => 'default',
-        'options' => [],
-    ];
-});
+class SettingDefinitionFactory extends Factory
+{
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
+    protected $model = SettingDefinition::class;
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
+    public function definition(): array
+    {
+        return [
+            'group' => 'settings',
+            'key' => 'key',
+            'type' => 'type',
+            'value' => 'default',
+            'options' => [],
+        ];
+    }
+}

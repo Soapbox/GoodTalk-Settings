@@ -27,7 +27,7 @@ class SettingsGroupFactory
             });
 
         foreach ($identifiers as $identifier) {
-            $overrides->put($identifier, $overrides->get($identifier, new Collection()));
+            $overrides->put($identifier, $overrides->get($identifier, collect()));
         }
 
         return $overrides->map(function ($overrides, $identifier) use ($definitions) {

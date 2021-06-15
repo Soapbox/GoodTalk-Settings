@@ -3,10 +3,8 @@
 namespace SoapBox\Settings;
 
 use Illuminate\Support\Collection;
-use SoapBox\Settings\Models\SettingValue;
 use SoapBox\Settings\Repositories\Settings;
 use SoapBox\Settings\Utilities\KeyValidator;
-use SoapBox\Settings\Models\SettingDefinition;
 
 class Manager
 {
@@ -33,7 +31,7 @@ class Manager
      */
     public function load(string $group, string $identifier): void
     {
-        $this->loadMultiple($group, new Collection($identifier));
+        $this->loadMultiple($group, collect($identifier));
     }
 
     /**

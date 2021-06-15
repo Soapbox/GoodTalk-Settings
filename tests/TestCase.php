@@ -15,7 +15,6 @@ class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withFactories(__DIR__ . '/../database/factories');
     }
 
     /**
@@ -27,7 +26,7 @@ class TestCase extends BaseTestCase
     {
         $app = parent::resolveApplication();
 
-        (Dotenv::create(dirname(__DIR__)))->load();
+        (Dotenv::createMutable(dirname(__DIR__)))->load();
 
         return $app;
     }

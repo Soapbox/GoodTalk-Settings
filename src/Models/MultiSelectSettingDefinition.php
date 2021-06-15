@@ -3,10 +3,13 @@
 namespace SoapBox\Settings\Models;
 
 use SoapBox\Settings\Models\Mutators\Mutator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use SoapBox\Settings\Models\Mutators\MultiSelectMutator;
+use SoapBox\Settings\Database\Factories\MultiSelectSettingDefinitionFactory;
 
 class MultiSelectSettingDefinition extends SettingDefinition
 {
+    use HasFactory;
     /**
      * Get the validation rules for this Mutator
      *
@@ -25,5 +28,10 @@ class MultiSelectSettingDefinition extends SettingDefinition
     public function getValueMutator(): Mutator
     {
         return new MultiSelectMutator();
+    }
+
+    protected static function newFactory()
+    {
+        return MultiSelectSettingDefinitionFactory::new();
     }
 }

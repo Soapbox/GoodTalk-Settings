@@ -84,7 +84,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateATextSetting()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
+        $definition = TextSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault('new_default');
@@ -100,7 +100,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateABooleanSetting()
     {
-        $definition = factory(BooleanSettingDefinition::class)->create();
+        $definition = BooleanSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault(false);
@@ -117,7 +117,7 @@ class SettingsTest extends TestCase
     public function itFailsToUpdateASingleSelectSettingWhenItIsInAnInvalidState()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(SingleSelectSettingDefinition::class)->create();
+        SingleSelectSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option1');
@@ -129,7 +129,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateASingleSelectSetting()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->create();
+        $definition = SingleSelectSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault('option2');
@@ -146,7 +146,7 @@ class SettingsTest extends TestCase
     public function itFailsToUpdateAMultiSelectSettingWhenItIsInAnInvalidState()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(MultiSelectSettingDefinition::class)->create();
+        MultiSelectSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->removeOption('option1');
@@ -158,7 +158,7 @@ class SettingsTest extends TestCase
      */
     public function itCanUpdateAMultiSelectSetting()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->create();
+        $definition = MultiSelectSettingDefinition::factory()->create();
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setDefault(['option2']);
@@ -175,7 +175,7 @@ class SettingsTest extends TestCase
     public function itFailsSavingTheSettingDefinitionIfTheDefaultNoLongerPassesTheCustomValidation()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(TextSettingDefinition::class)->create(['value' => 'not.valid']);
+        TextSettingDefinition::factory()->create(['value' => 'not.valid']);
 
         Settings::update('settings', 'key', function ($updater) {
             $updater->setValidation('alpha-dash');
@@ -187,13 +187,13 @@ class SettingsTest extends TestCase
      */
     public function itRemovesOverridesThatNoLongerPassCustomValidationForATextSetting()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
-        $override1 = factory(SettingValue::class)->create([
+        $definition = TextSettingDefinition::factory()->create();
+        $override1 = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'valid',
         ]);
-        $override2 = factory(SettingValue::class)->create([
+        $override2 = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'not-valid',
@@ -215,13 +215,13 @@ class SettingsTest extends TestCase
      */
     public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForASingleSelectSetting()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->create();
-        $override1 = factory(SettingValue::class)->create([
+        $definition = SingleSelectSettingDefinition::factory()->create();
+        $override1 = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'option1',
         ]);
-        $override2 = factory(SettingValue::class)->create([
+        $override2 = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'option2',
@@ -243,13 +243,13 @@ class SettingsTest extends TestCase
      */
     public function itRemovesOverridesThatNoLongerAreInTheSetOfOptionsForAMultiSelectSetting()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->create();
-        $override1 = factory(SettingValue::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create();
+        $override1 = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => ['option1'],
         ]);
-        $override2 = factory(SettingValue::class)->create([
+        $override2 = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => ['option2'],
@@ -281,7 +281,7 @@ class SettingsTest extends TestCase
     public function ensuringOverridesThrowsInvalidKeyExceptionWhenTheKeyDoesNotExist()
     {
         $this->expectException(InvalidKeyException::class);
-        factory(TextSettingDefinition::class)->create();
+        TextSettingDefinition::factory()->create();
         Settings::ensureHasOverride('settings', 'invalid_key', new Collection('1'));
     }
 
@@ -290,14 +290,14 @@ class SettingsTest extends TestCase
      */
     public function ensuringOverridesCreatesOverridesWithTheDefaultValue()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
-        factory(SettingValue::class)->create([
+        $definition = TextSettingDefinition::factory()->create();
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
         ]);
 
-        Settings::ensureHasOverride('settings', 'key', new Collection(['1', '2', '3']));
+        Settings::ensureHasOverride('settings', 'key', collect(['1', '2', '3']));
 
         $this->assertDatabaseHas('setting_values', ['identifier' => '1', 'value' => 'override']);
         $this->assertDatabaseHas('setting_values', ['identifier' => '2', 'value' => 'default']);
@@ -309,7 +309,7 @@ class SettingsTest extends TestCase
      */
     public function itCanDeleteASettingDefinition()
     {
-        factory(TextSettingDefinition::class)->create();
+        TextSettingDefinition::factory()->create();
         Settings::delete('settings', 'key');
 
         $this->assertDatabaseMissing('setting_definitions', ['group' => 'setting_definitions', 'key' => 'key']);
@@ -321,7 +321,7 @@ class SettingsTest extends TestCase
     public function ensureHasOverrideThrowsAnInvalidArgumentExceptionWhenTheGroupHasADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        Settings::ensureHasOverride('settings.wat', 'key', new Collection('1'));
+        Settings::ensureHasOverride('settings.wat', 'key', collect('1'));
     }
 
     /**
@@ -330,7 +330,7 @@ class SettingsTest extends TestCase
     public function ensureHasOverrideThrowsAnInvalidArgumentExceptionWhenTheKeyHasADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        Settings::ensureHasOverride('settings', 'invalid.key', new Collection('1'));
+        Settings::ensureHasOverride('settings', 'invalid.key', collect('1'));
     }
 
     /**
@@ -369,7 +369,7 @@ class SettingsTest extends TestCase
     public function updateThrowsInvalidKeyExceptionWhenTheKeyDoesNotExist()
     {
         $this->expectException(InvalidKeyException::class);
-        factory(TextSettingDefinition::class)->create();
+        TextSettingDefinition::factory()->create();
         Settings::update('settings', 'invalid_key', function () {
         });
     }
@@ -398,7 +398,7 @@ class SettingsTest extends TestCase
     public function deleteThrowsInvalidGroupExceptionWhenTheGroupDoesNotExist()
     {
         $this->expectException(InvalidGroupException::class);
-        Settings::delete('invalid_group', 'key', new Collection('1'));
+        Settings::delete('invalid_group', 'key', collect('1'));
     }
 
     /**
@@ -407,7 +407,7 @@ class SettingsTest extends TestCase
     public function deleteThrowsInvalidKeyExceptionWhenTheKeyDoesNotExist()
     {
         $this->expectException(InvalidKeyException::class);
-        factory(TextSettingDefinition::class)->create();
-        Settings::delete('settings', 'invalid_key', new Collection('1'));
+        TextSettingDefinition::factory()->create();
+        Settings::delete('settings', 'invalid_key', collect('1'));
     }
 }
