@@ -17,7 +17,7 @@
     "require": {
         "illuminate/support": "^6.0",
         "illuminate/database": "^6.0",
-        "symfony/cache": "^3.3",
+        "symfony/cache": "^5.4.39",
         "jaspaul/eloquent-model-validation": "^1.0"
     },
     "require-dev": {
