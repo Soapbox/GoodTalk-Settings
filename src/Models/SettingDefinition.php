@@ -3,7 +3,6 @@
 namespace SoapBox\Settings\Models;
 
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -11,9 +10,9 @@ use SoapBox\Settings\Models\Mutators\Mutator;
 use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use SoapBox\Settings\Exceptions\InvalidKeyException;
-use Jaspaul\EloquentModelValidation\Traits\Validates;
 use SoapBox\Settings\Exceptions\InvalidGroupException;
-use Jaspaul\EloquentModelValidation\Contracts\Validatable;
+use SoapBox\Settings\ElequentModelValidation\Validates;
+use SoapBox\Settings\ElequentModelValidation\Validatable;
 
 class SettingDefinition extends Model implements Validatable
 {
