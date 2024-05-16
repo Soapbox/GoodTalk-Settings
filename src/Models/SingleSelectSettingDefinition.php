@@ -3,10 +3,14 @@
 namespace SoapBox\Settings\Models;
 
 use SoapBox\Settings\Models\Mutators\Mutator;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use SoapBox\Settings\Models\Mutators\SingleSelectMutator;
+use Database\Factories\SingleSelectSettingDefinitionFactory;
 
 class SingleSelectSettingDefinition extends SettingDefinition
 {
+    use HasFactory;
+
     /**
      * Get the validation rules for this Mutator
      *
@@ -24,5 +28,10 @@ class SingleSelectSettingDefinition extends SettingDefinition
     public function getValueMutator(): Mutator
     {
         return new SingleSelectMutator();
+    }
+
+    public static function newFactory()
+    {
+        return SingleSelectSettingDefinitionFactory::new();
     }
 }
