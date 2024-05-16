@@ -14,7 +14,7 @@ class MultiSelectSettingDefinitionTest extends TestCase
     public function itFailsCreatingAMultiSelectSettingWhenAValueIsNotAnArray()
     {
         $this->expectException(ValidationException::class);
-        factory(MultiSelectSettingDefinition::class)->create([
+        MultiSelectSettingDefinition::factory()->create([
             'options' => ['option1', 'option2'],
             'value' => 'option1',
         ]);
@@ -26,7 +26,7 @@ class MultiSelectSettingDefinitionTest extends TestCase
     public function itFailsCreatingAMultiSelectSettingWhenAValueIsNotInTheOptions()
     {
         $this->expectException(ValidationException::class);
-        factory(MultiSelectSettingDefinition::class)->create([
+        MultiSelectSettingDefinition::factory()->create([
             'options' => ['option1', 'option2'],
             'value' => ['option1', 'invalid'],
         ]);
@@ -37,7 +37,7 @@ class MultiSelectSettingDefinitionTest extends TestCase
      */
     public function itSuccessfullyMutatesASingleValueOfAMultiSelectSetting()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create([
             'options' => ['test_value'],
             'value' => ['test_value'],
         ]);
@@ -49,7 +49,7 @@ class MultiSelectSettingDefinitionTest extends TestCase
      */
     public function itSuccessfullyMutatesMultipleValuesOfAMultiSelectSetting()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->create([
+        $definition = MultiSelectSettingDefinition::factory()->create([
             'options' => ['test_value1', 'test_value2'],
             'value' => ['test_value1', 'test_value2'],
         ]);
