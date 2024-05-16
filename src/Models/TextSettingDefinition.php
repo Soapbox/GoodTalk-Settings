@@ -4,9 +4,13 @@ namespace SoapBox\Settings\Models;
 
 use SoapBox\Settings\Models\Mutators\Mutator;
 use SoapBox\Settings\Models\Mutators\TextMutator;
+use Database\Factories\TextSettingDefinitionFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TextSettingDefinition extends SettingDefinition
 {
+    use HasFactory;
+
     /**
      * Get the validation rules for this Mutator
      *
@@ -26,5 +30,10 @@ class TextSettingDefinition extends SettingDefinition
     public function getValueMutator(): Mutator
     {
         return new TextMutator();
+    }
+
+    public static function newFactory()
+    {
+        return TextSettingDefinitionFactory::new();
     }
 }

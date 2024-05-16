@@ -13,7 +13,9 @@ class TextSettingDefinitionTest extends TestCase
      */
     public function itSuccessfullyMutatesTheValueOfATextSetting()
     {
-        $definition = factory(TextSettingDefinition::class)->create(['value' => 'test_value']);
+        $definition = TextSettingDefinition::factory()->create([
+            'value' => 'test_value'
+        ]);
         $this->assertSame('test_value', $definition->fresh()->value);
     }
 
@@ -23,7 +25,7 @@ class TextSettingDefinitionTest extends TestCase
     public function itFailsWhenTheValueDoesNotPassTheCustomValidationRules()
     {
         $this->expectException(ValidationException::class);
-        $definition = factory(TextSettingDefinition::class)->create([
+        TextSettingDefinition::factory()->create([
             'value' => 'test_value',
             'validation' => 'integer',
         ]);
@@ -34,9 +36,10 @@ class TextSettingDefinitionTest extends TestCase
      */
     public function itCreatedASettingDefinitionWhenItPassesCustomValidation()
     {
-        $definition = factory(TextSettingDefinition::class)->create([
+        $definition = TextSettingDefinition::factory()->create([
             'value' => '1',
             'validation' => 'integer',
         ]);
+        $this->assertSame('1', $definition->fresh()->value);
     }
 }
