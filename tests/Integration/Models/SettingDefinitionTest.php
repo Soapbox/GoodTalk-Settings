@@ -14,7 +14,9 @@ class SettingDefinitionTest extends TestCase
     public function itFailsCreatingASettingWhenTheGroupHasADot()
     {
         $this->expectException(ValidationException::class);
-        factory(SettingDefinition::class)->create(['group' => 'with.dot']);
+        SettingDefinition::factory()->create([
+            'group' => 'with.dot'
+        ]);
     }
 
     /**
@@ -23,7 +25,9 @@ class SettingDefinitionTest extends TestCase
     public function itFailsCreatingASettingWhenTheKeyHasADot()
     {
         $this->expectException(ValidationException::class);
-        factory(SettingDefinition::class)->create(['key' => 'with.dot']);
+        SettingDefinition::factory()->create([
+            'key' => 'with.dot'
+        ]);
     }
 
     /**
@@ -32,7 +36,9 @@ class SettingDefinitionTest extends TestCase
     public function itFailsCreatingASettingWhenAnOptionHasADot()
     {
         $this->expectException(ValidationException::class);
-        factory(SettingDefinition::class)->create(['options' => ['with.dot']]);
+        SettingDefinition::factory()->create([
+            'options' => ['with.dot']
+        ]);
     }
 
     /**
@@ -41,6 +47,8 @@ class SettingDefinitionTest extends TestCase
     public function itFailsCreatingASettingWhenOptionsIsNotAnArray()
     {
         $this->expectException(ValidationException::class);
-        factory(SettingDefinition::class)->create(['options' => 'option']);
+        SettingDefinition::factory()->create([
+            'options' => 'option'
+        ]);
     }
 }

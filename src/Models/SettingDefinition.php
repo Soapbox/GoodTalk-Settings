@@ -7,16 +7,18 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use SoapBox\Settings\Models\Mutators\Mutator;
+use Database\Factories\SettingDefinitionFactory;
 use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use SoapBox\Settings\Exceptions\InvalidKeyException;
 use SoapBox\Settings\Exceptions\InvalidGroupException;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use SoapBox\Settings\ElequentModelValidation\Validates;
 use SoapBox\Settings\ElequentModelValidation\Validatable;
 
 class SettingDefinition extends Model implements Validatable
 {
-    use Validates;
+    use Validates, HasFactory;
 
     protected $guarded = [];
     protected $casts = ['options' => 'array'];
@@ -221,5 +223,10 @@ class SettingDefinition extends Model implements Validatable
     public function scopeKey(Builder $query, string $value): Builder
     {
         return $query->where('key', $value);
+    }
+
+    public static function newFactory()
+    {
+        return SettingDefinitionFactory::new();
     }
 }
