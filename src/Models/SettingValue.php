@@ -5,14 +5,16 @@ namespace SoapBox\Settings\Models;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\SettingValueFactory;
 use SoapBox\Settings\Models\Mutators\Mutator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use SoapBox\Settings\ElequentModelValidation\Validates;
 use SoapBox\Settings\ElequentModelValidation\Validatable;
 
 class SettingValue extends Model implements Validatable
 {
-    use Validates;
+    use Validates, HasFactory;
 
     protected $guarded = [];
     protected $with = ['definition'];
@@ -132,5 +134,10 @@ class SettingValue extends Model implements Validatable
     public function scopeIdentifier(Builder $query, string $identifier): Builder
     {
         return $query->where('identifier', $identifier);
+    }
+
+    public static function newFactory()
+    {
+        return SettingValueFactory::new();
     }
 }
