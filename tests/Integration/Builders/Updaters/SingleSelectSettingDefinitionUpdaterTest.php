@@ -13,7 +13,7 @@ class SingleSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanUpdateTheDefaultValue()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->make([
+        $definition = SingleSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => 'option1',
         ]);
@@ -29,7 +29,7 @@ class SingleSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanAddAnOptionValue()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->make([
+        $definition = SingleSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => 'option1',
         ]);
@@ -45,7 +45,7 @@ class SingleSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanRemoveAnOptionValue()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->make([
+        $definition = SingleSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => 'option1',
         ]);
@@ -61,7 +61,7 @@ class SingleSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanSetTheOptionValues()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->make([
+        $definition = SingleSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => 'option1',
         ]);
