@@ -16,11 +16,11 @@ class SettingsFactoryTest extends TestCase
     public function itCanMakeSettingsWithoutOverrides()
     {
         $definitions = new Collection();
-        $definitions->push(factory(SettingDefinition::class)->make([
+        $definitions->push(SettingDefinition::factory()->make([
             'key' => 'k1',
             'value' => 'v1',
         ]));
-        $definitions->push(factory(SettingDefinition::class)->make([
+        $definitions->push(SettingDefinition::factory()->make([
             'key' => 'k2',
             'value' => 'v2',
         ]));
@@ -43,15 +43,15 @@ class SettingsFactoryTest extends TestCase
      */
     public function itCanMakeSettingsWithSomeOverrides()
     {
-        $definitions = (new Collection())->push(factory(SettingDefinition::class)->create([
+        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
-        ]))->push(factory(SettingDefinition::class)->create([
+        ]))->push(SettingDefinition::factory()->create([
             'key' => 'k2',
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+        $overrides = (new Collection())->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => '1',
             'value' => 'o1',
@@ -75,20 +75,20 @@ class SettingsFactoryTest extends TestCase
      */
     public function itCanMakeSettingsWithOverrides()
     {
-        $definitions = (new Collection())->push(factory(SettingDefinition::class)->create([
+        $definitions = (new Collection())->push(SettingDefinition::factory()->create([
             'key' => 'k1',
             'value' => 'v1',
-        ]))->push(factory(SettingDefinition::class)->create([
+        ]))->push(SettingDefinition::factory()->create([
             'key' => 'k2',
             'value' => 'v2',
         ]));
 
-        $overrides = (new Collection())->push(factory(SettingValue::class)->create([
+        $overrides = (new Collection())->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(0)->id,
             'identifier' => '1',
             'value' => 'o1',
         ]))
-        ->push(factory(SettingValue::class)->create([
+        ->push(SettingValue::factory()->create([
             'setting_definition_id' => $definitions->get(1)->id,
             'identifier' => '1',
             'value' => 'o2',
