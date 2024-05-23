@@ -93,7 +93,7 @@ class DatabaseSettingsTest extends TestCase
     {
         $this->expectException(InvalidKeyException::class);
 
-        $definition = factory(TextSettingDefinition::class)->create();
+        $definition = TextSettingDefinition::factory()->create();
         $setting = new Setting($definition->group, 'invalid_key', 'identifier', 'value');
 
         $repository = new DatabaseSettings();
