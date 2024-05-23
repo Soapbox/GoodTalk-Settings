@@ -56,6 +56,6 @@ jobs:
 
 workflows:
   version: 2
-  goodtalk-api:
+  goodtalk-settings:
     jobs:
       - mariadb10
