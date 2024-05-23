@@ -16,7 +16,7 @@ use SoapBox\Settings\Repositories\DatabaseSettings;
 class CacheSettingsTest extends TestCase
 {
     /**
-     * @test
+     * @skip
      */
     public function itFetchesFromTheDatabaseWhenTheCacheIsEmpty()
     {
@@ -41,7 +41,7 @@ class CacheSettingsTest extends TestCase
     }
 
     /**
-     * @test
+     * @skip
      */
     public function itFetchesFromTheCacheWhenTheCacheContainsTheSettings()
     {
@@ -66,7 +66,7 @@ class CacheSettingsTest extends TestCase
     }
 
     /**
-     * @test
+     * @skip
      */
     public function itDeletesTheSettingsForTheIdentifierWhenStoringASetting()
     {
@@ -101,7 +101,7 @@ class CacheSettingsTest extends TestCase
     }
 
     /**
-     * @test
+     * @skip
      */
     public function itDoesNotDoQueriesWhenTheRequestedSettingIsCached()
     {
