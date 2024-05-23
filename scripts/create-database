@@ -1,0 +1,34 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]; then
+  echo "Usage: rebuild-settings-database <environment>";
+  exit 1;
+fi
+
+ENVIRONMENT=$1
+
+if ! test -f .env.$ENVIRONMENT; then
+  echo "Evnironment file .env.$ENVIRONMENT does not exist";
+  exit 1;
+fi
+
+USERNAME=$(cat .env.$ENVIRONMENT | grep DB_USERNAME | sed s/.*=//)
+PASSWORD=$(cat .env.$ENVIRONMENT | grep DB_PASSWORD | sed s/.*=//)
+DB_HOST=$(cat .env.$ENVIRONMENT | grep DB_HOST | sed s/.*=//)
+DATABASE=$(cat .env.$ENVIRONMENT | grep DB_DATABASE | sed s/.*=//)
+PORT=$(cat .env.$ENVIRONMENT | grep DB_PORT | sed s/.*=//)
+
+echo "Creating hypercontext user";
+mysql --host=$DB_HOST --port=$PORT --user=root --password=secret < scripts/create-users.sql
+
+echo "Creating: $DATABASE on $DB_HOST:$PORT with user $USERNAME";
+mysql --host=$DB_HOST --port=$PORT --user=$USERNAME --password=$PASSWORD -e "DROP DATABASE IF EXISTS $DATABASE;"
+mysql --host=$DB_HOST --port=$PORT --user=$USERNAME --password=$PASSWORD -e "CREATE DATABASE $DATABASE;"
+
+if [ $? -eq 0 ]; then
+  echo "Success";
+  exit 0;
+else
+  echo "Failed to set up Settings database";
+  exit 1;
+fi

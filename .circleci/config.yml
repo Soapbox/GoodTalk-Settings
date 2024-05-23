@@ -26,6 +26,18 @@ commands:
           paths:
             - ./vendor
       - run:
+          name: Create .env
+          command: |
+            cp .env.circle-ci .env
+      - run:
+          name: Create Calendar Sync database
+          command: |
+            bash scripts/create-database circle-ci
+      - run:
+          name: Build database
+          command: |
+            bash rebuild_database
+      - run:
           name: Run Tests
           command: |
             ./test
