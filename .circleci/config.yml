@@ -38,7 +38,7 @@ jobs:
         command: mysqld --default-authentication-plugin=mysql_native_password
         environment:
           MYSQL_ROOT_PASSWORD: "secret"
-    resource_class: large
+    resource_class: small
     steps:
       - build
 
