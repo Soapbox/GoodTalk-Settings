@@ -36,8 +36,7 @@ class ManagerTest extends TestCase
             'value' => 'default',
         ]);
 
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $result = $manager->get('settings', '1');
 
         $this->assertCount(2, $result);
@@ -70,8 +69,7 @@ class ManagerTest extends TestCase
             'value' => 'override2',
         ]);
 
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $result = $manager->getMultiple('settings', new Collection(['1', '2', '3']));
 
         $this->assertCount(3, $result);
@@ -92,8 +90,8 @@ class ManagerTest extends TestCase
             'key' => 'setting1',
             'value' => 'default',
         ]);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+
+        $manager = app(Manager::class);
         $manager->load('settings', '1');
 
         $definition->value = 'new_value';
@@ -134,8 +132,7 @@ class ManagerTest extends TestCase
         $setting = SettingFactory::make('1', $definition);
         $setting->setValue('override');
 
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $result = $manager->store($setting);
 
         $this->assertDatabaseHas('setting_values', ['identifier' => '1', 'value' => 'override']);
@@ -158,8 +155,7 @@ class ManagerTest extends TestCase
         $setting = SettingFactory::make('1', $definition);
         $setting->setValue('new_override');
 
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $result = $manager->store($setting);
 
         $this->assertDatabaseHas('setting_values', ['identifier' => '1', 'value' => 'new_override']);
@@ -189,8 +185,7 @@ class ManagerTest extends TestCase
     {
         $setting = new Setting('group', 'invalid.key', 'identifier', 'value');
 
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $this->expectException(InvalidArgumentException::class);
         $manager->store($setting);
     }
@@ -214,8 +209,7 @@ class ManagerTest extends TestCase
     public function loadThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->load('invalid.group', 'key');
     }
 
@@ -225,8 +219,7 @@ class ManagerTest extends TestCase
     public function loadThrowsAnInvalidArgumentExceptionWhenTheIdentifierContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->load('group', 'invalid.key');
     }
 
@@ -236,8 +229,7 @@ class ManagerTest extends TestCase
     public function loadMultipleThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->loadMultiple('invalid.group', new Collection('key'));
     }
 
@@ -247,8 +239,7 @@ class ManagerTest extends TestCase
     public function loadMultipleThrowsAnInvalidArgumentExceptionWhenAIdentifierContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->loadMultiple('group', new Collection('invalid.key'));
     }
 
@@ -258,8 +249,7 @@ class ManagerTest extends TestCase
     public function getThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->get('invalid.group', 'key');
     }
 
@@ -269,8 +259,7 @@ class ManagerTest extends TestCase
     public function getThrowsAnInvalidArgumentExceptionWhenTheIdentifierContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->get('group', 'invalid.key');
     }
 
@@ -280,8 +269,7 @@ class ManagerTest extends TestCase
     public function getMultipleThrowsAnInvalidArgumentExceptionWhenTheGroupContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->getMultiple('invalid.group', new Collection('key'));
     }
 
@@ -291,8 +279,7 @@ class ManagerTest extends TestCase
     public function getMultipleThrowsAnInvalidArgumentExceptionWhenTheIdentifierContainsADot()
     {
         $this->expectException(InvalidArgumentException::class);
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->getMultiple('group', new Collection('invalid.key'));
     }
 
@@ -303,8 +290,7 @@ class ManagerTest extends TestCase
     {
         $this->expectException(InvalidGroupException::class);
         $setting = new Setting('invalid_group', 'key', '1', 'test');
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->store($setting);
     }
 
@@ -316,8 +302,7 @@ class ManagerTest extends TestCase
         SettingDefinition::factory()->create();
         $this->expectException(InvalidKeyException::class);
         $setting = new Setting('settings', 'invalid_key', '1', 'test');
-        $databaseSettings = new DatabaseSettings();
-        $manager = new Manager($databaseSettings);
+        $manager = app(Manager::class);
         $manager->store($setting);
     }
 }
