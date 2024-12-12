@@ -14,7 +14,7 @@ class SettingFactoryTest extends TestCase
      */
     public function itCanMakeASettingWithoutAnOverride()
     {
-        $definition = factory(SettingDefinition::class)->make();
+        $definition = SettingDefinition::factory()->make();
 
         $setting = SettingFactory::make('identifier', $definition);
 
@@ -29,8 +29,8 @@ class SettingFactoryTest extends TestCase
      */
     public function itCanMakeASettingWithAnOverride()
     {
-        $definition = factory(SettingDefinition::class)->create();
-        $override = factory(SettingValue::class)->create([
+        $definition = SettingDefinition::factory()->create();
+        $override = SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'value' => 'override',
         ]);

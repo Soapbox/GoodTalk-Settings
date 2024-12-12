@@ -13,7 +13,7 @@ class MultiSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanUpdateTheDefaultValue()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->make([
+        $definition = MultiSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => ['option1'],
         ]);
@@ -29,7 +29,7 @@ class MultiSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanAddAnOptionValue()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->make([
+        $definition = MultiSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => ['option1'],
         ]);
@@ -45,7 +45,7 @@ class MultiSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanRemoveAnOptionValue()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->make([
+        $definition = MultiSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => ['option1'],
         ]);
@@ -61,7 +61,7 @@ class MultiSelectSettingDefinitionUpdaterTest extends TestCase
      */
     public function itCanSetTheOptionValues()
     {
-        $definition = factory(MultiSelectSettingDefinition::class)->make([
+        $definition = MultiSelectSettingDefinition::factory()->make([
             'options' => ['option1', 'option2'],
             'value' => ['option1'],
         ]);

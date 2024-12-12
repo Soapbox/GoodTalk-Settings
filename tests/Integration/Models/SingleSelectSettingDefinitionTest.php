@@ -14,7 +14,7 @@ class SingleSelectSettingDefinitionTest extends TestCase
     public function itFailsCreatingASingleSelectSettingWhenTheValueIsNotInTheOptions()
     {
         $this->expectException(ValidationException::class);
-        factory(SingleSelectSettingDefinition::class)->create([
+        SingleSelectSettingDefinition::factory()->create([
             'options' => ['option1', 'option2'],
             'value' => 'invalid',
         ]);
@@ -25,7 +25,7 @@ class SingleSelectSettingDefinitionTest extends TestCase
      */
     public function itSuccessfullyMutatesTheValueOfASingleSelectSetting()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->create([
+        $definition = SingleSelectSettingDefinition::factory()->create([
             'options' => ['test_value'],
             'value' => 'test_value',
         ]);

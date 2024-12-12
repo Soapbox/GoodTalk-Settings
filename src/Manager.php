@@ -3,16 +3,14 @@
 namespace SoapBox\Settings;
 
 use Illuminate\Support\Collection;
-use SoapBox\Settings\Models\SettingValue;
-use SoapBox\Settings\Repositories\Settings;
 use SoapBox\Settings\Utilities\KeyValidator;
-use SoapBox\Settings\Models\SettingDefinition;
+use SoapBox\Settings\Repositories\DatabaseSettings;
 
 class Manager
 {
     private $settings;
 
-    public function __construct(Settings $settings)
+    public function __construct(DatabaseSettings $settings)
     {
         $this->settings = $settings;
     }

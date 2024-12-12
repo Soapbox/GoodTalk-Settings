@@ -22,15 +22,15 @@ class DatabaseSettingsTest extends TestCase
      */
     public function itFetchesDefinitionsFromTheDatabaseAndAppliesTheirOverride()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
         ]);
-        factory(SettingDefinition::class)->create([
+        SettingDefinition::factory()->create([
             'key' => 'setting2',
         ]);
 
@@ -47,15 +47,15 @@ class DatabaseSettingsTest extends TestCase
      */
     public function itFetchesDefinitionsFromTheDatabaseAndAppliesTheirOverrideForMultipleIdentifiers()
     {
-        $definition = factory(SettingDefinition::class)->create([
+        $definition = SettingDefinition::factory()->create([
             'key' => 'setting1',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override1',
         ]);
-        factory(SettingValue::class)->create([
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '2',
             'value' => 'override2',
@@ -93,7 +93,7 @@ class DatabaseSettingsTest extends TestCase
     {
         $this->expectException(InvalidKeyException::class);
 
-        $definition = factory(TextSettingDefinition::class)->create();
+        $definition = TextSettingDefinition::factory()->create();
         $setting = new Setting($definition->group, 'invalid_key', 'identifier', 'value');
 
         $repository = new DatabaseSettings();
@@ -105,7 +105,7 @@ class DatabaseSettingsTest extends TestCase
      */
     public function itStoresASettingValue()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
+        $definition = TextSettingDefinition::factory()->create();
         $setting = SettingFactory::make('1', $definition);
         $setting->setValue('override');
 
@@ -124,8 +124,8 @@ class DatabaseSettingsTest extends TestCase
      */
     public function itUpdatesAnExistingSettings()
     {
-        $definition = factory(TextSettingDefinition::class)->create();
-        factory(SettingValue::class)->create([
+        $definition = TextSettingDefinition::factory()->create();
+        SettingValue::factory()->create([
             'setting_definition_id' => $definition->id,
             'identifier' => '1',
             'value' => 'override',
@@ -148,7 +148,7 @@ class DatabaseSettingsTest extends TestCase
      */
     public function itFailsToSaveASettingTheFailsValidation()
     {
-        $definition = factory(SingleSelectSettingDefinition::class)->create();
+        $definition = SingleSelectSettingDefinition::factory()->create();
         $setting = SettingFactory::make('1', $definition);
         $setting->setValue('invalid_option');
 

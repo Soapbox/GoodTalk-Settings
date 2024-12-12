@@ -2,19 +2,19 @@
 
 namespace SoapBox\Settings\Models;
 
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Database\Factories\SettingValueFactory;
 use SoapBox\Settings\Models\Mutators\Mutator;
-use SoapBox\Settings\Models\Mutators\TextMutator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Jaspaul\EloquentModelValidation\Traits\Validates;
-use Jaspaul\EloquentModelValidation\Contracts\Validatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use SoapBox\Settings\ElequentModelValidation\Validates;
+use SoapBox\Settings\ElequentModelValidation\Validatable;
 
 class SettingValue extends Model implements Validatable
 {
-    use Validates;
+    use Validates, HasFactory;
 
     protected $guarded = [];
     protected $with = ['definition'];
@@ -31,15 +31,21 @@ class SettingValue extends Model implements Validatable
     /**
      * Create a new instance of a SettingValue
      *
+     * @throws \Illuminate\Validation\ValidationException
+     *
      * @param \SoapBox\Settings\Models\SettingDefinition $definition
      * @param array $attributes
      *
      * @return \SoapBox\Settings\Models\SettingValue
      */
-    public static function create(SettingDefinition $definition, array $attributes)
+    public static function create(SettingDefinition $definition, array $attributes): SettingValue
     {
         $attributes['setting_definition_id'] = $definition->id;
-        return (new static())->newQuery()->create($attributes);
+
+        $s = new SettingValue($attributes);
+        $s->save();
+
+        return $s;
     }
 
     /**
@@ -70,7 +76,7 @@ class SettingValue extends Model implements Validatable
     }
 
     /**
-     * Get the handler for this type of setting definition
+     * Get the handler for this type of setting definition`
      *
      * @return \SoapBox\Settings\Models\Mutators\Mutator
      */
@@ -134,5 +140,10 @@ class SettingValue extends Model implements Validatable
     public function scopeIdentifier(Builder $query, string $identifier): Builder
     {
         return $query->where('identifier', $identifier);
+    }
+
+    public static function newFactory()
+    {
+        return SettingValueFactory::new();
     }
 }

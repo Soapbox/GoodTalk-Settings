@@ -1,0 +1,61 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2.1
+
+commands:
+  build:
+    steps:
+      - checkout
+      - run: sudo apt update
+      - run:
+          name: Install MySQL CLI
+          command: |
+            sudo apt-get install default-mysql-client
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "composer.json" }}
+            - v2-dependencies-
+      - run:
+          name: Composer Install
+          command: |
+            composer install -n --prefer-dist --no-scripts
+      - save_cache:
+          key: v2-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+      - run:
+          name: Create .env
+          command: |
+            cp .env.circle-ci .env
+      - run:
+          name: Create Calendar Sync database
+          command: |
+            bash scripts/create-database circle-ci
+      - run:
+          name: Build database
+          command: |
+            bash rebuild_database
+      - run:
+          name: Run Tests
+          command: |
+            ./test
+
+jobs:
+  mariadb10:
+    docker:
+      - image: cimg/php:8.1
+      - image: cimg/mariadb:10.4.33
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        environment:
+          MYSQL_ROOT_PASSWORD: "secret"
+    resource_class: small
+    steps:
+      - build
+
+workflows:
+  version: 2
+  goodtalk-settings:
+    jobs:
+      - mariadb10
